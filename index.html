@@ -1,0 +1,935 @@
+<!-- ================================================= -->
+<!-- CONTENTFORGE | Blog + Newsletter Platform          -->
+<!-- Premium Digital Asset by Source Vault               -->
+<!-- ================================================= -->
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+/* --- Odoo Override --- */
+#wrapwrap .cf,.cf{width:100vw!important;max-width:100vw!important;margin-left:calc(-50vw + 50%)!important;padding:0!important;overflow-x:hidden!important}
+
+/* --- Variables Light --- */
+.cf{
+  --bg:#fafbfc;--bg2:#fff;--bg3:#f4f6f8;
+  --sf:#fff;--sf2:#f8f9fb;
+  --tx:#111827;--tx2:#374151;--tx3:#6b7280;--tx4:#9ca3af;
+  --pri:#6366f1;--pri-h:#4f46e5;--pri-g:rgba(99,102,241,.08);
+  --cyan:#0ea5e9;--gold:#f59e0b;--gold-h:#d97706;--gold-g:rgba(245,158,11,.15);
+  --green:#10b981;--green-g:rgba(16,185,129,.08);
+  --red:#ef4444;--pink:#ec4899;--purple:#8b5cf6;
+  --wa:#25d366;
+  --bdr:rgba(0,0,0,.06);
+  --sh:0 1px 3px rgba(0,0,0,.04);--sh2:0 8px 30px rgba(0,0,0,.05);--sh3:0 20px 60px rgba(99,102,241,.07);
+  --nav-bg:rgba(255,255,255,.88);
+  --hero-g:linear-gradient(150deg,#1e1b4b,#312e81 40%,#4f46e5 75%,#818cf8);
+  --r:14px;--rs:8px;--ease:.3s cubic-bezier(.4,0,.2,1);
+}
+
+/* --- Dark --- */
+.cf.dk{
+  --bg:#030712;--bg2:#0a0f1a;--bg3:#111827;
+  --sf:#0f172a;--sf2:#1e293b;
+  --tx:#f1f5f9;--tx2:#cbd5e1;--tx3:#94a3b8;--tx4:#475569;
+  --pri:#a5b4fc;--pri-h:#818cf8;--pri-g:rgba(165,180,252,.08);
+  --bdr:rgba(255,255,255,.06);
+  --sh:0 1px 3px rgba(0,0,0,.2);--sh2:0 8px 30px rgba(0,0,0,.3);--sh3:0 20px 60px rgba(129,140,248,.06);
+  --nav-bg:rgba(3,7,18,.92);
+  --hero-g:linear-gradient(150deg,#020617,#0a0f2e 40%,#1e1b4b 75%,#312e81);
+}
+
+/* --- Reset --- */
+.cf *,.cf *::before,.cf *::after{margin:0;padding:0;box-sizing:border-box}
+.cf{font-family:'Inter',system-ui,sans-serif;color:var(--tx);background:var(--bg);line-height:1.65;-webkit-font-smoothing:antialiased;transition:background var(--ease),color var(--ease)}
+.cf h1,.cf h2,.cf h3,.cf h4,.cf h5{font-family:'Inter',sans-serif;line-height:1.15;font-weight:700}
+.cf a{text-decoration:none;color:inherit}.cf ul{list-style:none}.cf section{scroll-margin-top:70px}
+.cf-w{max-width:1100px;margin:0 auto;padding:0 24px}
+.cf-wn{max-width:720px;margin:0 auto;padding:0 24px}
+
+/* =============================================
+   NAV
+   ============================================= */
+.cf-nav{position:fixed;top:0;left:0;width:100%;z-index:99990;background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid transparent;transition:var(--ease)}
+.cf-nav.scrolled{border-bottom-color:var(--bdr)}
+.cf-nav-in{display:flex;align-items:center;justify-content:space-between;height:60px;max-width:1100px;margin:0 auto;padding:0 24px}
+
+.cf-logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:1.1rem;letter-spacing:-.02em;cursor:pointer}
+.cf-logo-i{width:30px;height:30px;background:linear-gradient(135deg,#6366f1,#ec4899);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem}
+.cf-logo em{font-style:normal;color:var(--pri)}
+
+.cf-links{display:flex;gap:24px}
+.cf-links a{font-size:.82rem;font-weight:500;color:var(--tx3);transition:color var(--ease);cursor:pointer}
+.cf-links a:hover{color:var(--pri)}
+
+.cf-nav-r{display:flex;align-items:center;gap:10px}
+.cf-tog{display:flex;align-items:center;gap:5px;font-size:.66rem;font-weight:600;color:var(--tx4);user-select:none}
+.cf-sw{position:relative;width:34px;height:17px;flex-shrink:0}
+.cf-sw input{opacity:0;width:0;height:0;position:absolute}
+.cf-sli{position:absolute;inset:0;background:var(--bdr);border-radius:17px;cursor:pointer;transition:var(--ease)}
+.dk .cf-sli{background:rgba(255,255,255,.1)}
+.cf-sli::before{content:'';position:absolute;width:11px;height:11px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:var(--ease)}
+.cf-sw input:checked+.cf-sli{background:var(--pri)}
+.cf-sw input:checked+.cf-sli::before{transform:translateX(17px)}
+.cf-sep{width:1px;height:16px;background:var(--bdr);margin:0 2px}
+
+/* View switcher pills */
+.cf-views{display:flex;gap:4px;background:var(--bg3);border-radius:8px;padding:3px}
+.cf-view-btn{padding:6px 14px;border-radius:6px;font-size:.75rem;font-weight:600;border:none;background:none;color:var(--tx3);cursor:pointer;transition:var(--ease);font-family:'Inter',sans-serif}
+.cf-view-btn.active{background:var(--pri);color:#fff}
+.cf-view-btn:hover:not(.active){background:var(--pri-g);color:var(--pri)}
+
+.cf-burg{display:none;background:none;border:none;font-size:1.2rem;color:var(--tx);cursor:pointer}
+
+/* Mobile */
+.cf-mob{display:none;position:fixed;inset:0;z-index:99991;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:20px}
+.cf-mob.open{display:flex}
+.cf-mob a{font-size:1.2rem;font-weight:600}
+.cf-mob-x{position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.5rem;color:var(--tx);cursor:pointer}
+.cf-mob-ctrls{display:flex;flex-direction:column;gap:12px;margin-top:14px;align-items:center}
+
+/* =============================================
+   BUTTONS
+   ============================================= */
+.cf-btn{display:inline-flex;align-items:center;gap:7px;padding:12px 24px;border-radius:var(--rs);font-family:'Inter',sans-serif;font-weight:600;font-size:.86rem;border:none;cursor:pointer;transition:var(--ease);white-space:nowrap;line-height:1}
+.cf-btn-pri{background:var(--pri);color:#fff}
+.cf-btn-pri:hover{background:var(--pri-h);transform:translateY(-2px)}
+.cf-btn-gold{background:var(--gold);color:#1a1a2e;box-shadow:0 4px 14px var(--gold-g)}
+.cf-btn-gold:hover{background:var(--gold-h);transform:translateY(-2px)}
+.cf-btn-light{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.18)}
+.cf-btn-light:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
+.cf-btn-ghost{background:transparent;color:var(--pri);border:1.5px solid var(--pri)}
+.cf-btn-ghost:hover{background:var(--pri-g);transform:translateY(-2px)}
+.cf-btn-sm{padding:9px 16px;font-size:.78rem;border-radius:6px}
+.cf-btn-lg{padding:15px 32px;font-size:.92rem;border-radius:10px}
+
+/* =============================================
+   VIEWS CONTAINER
+   ============================================= */
+.cf-view{display:none}.cf-view.active{display:block}
+
+/* =============================================
+   READING PROGRESS BAR
+   ============================================= */
+.cf-progress{position:fixed;top:60px;left:0;width:0;height:3px;background:linear-gradient(90deg,var(--pri),var(--pink));z-index:99989;transition:width .1s linear}
+
+/* =============================================
+   SECTIONS
+   ============================================= */
+.cf-s{padding:80px 0}
+.cf-s-alt{background:var(--bg2)}
+.cf-s-head{text-align:center;max-width:540px;margin:0 auto 46px}
+.cf-s-tag{display:inline-block;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--pri);margin-bottom:8px}
+.cf-s-head h2{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:10px;letter-spacing:-.02em}
+.cf-s-head h2 span{color:var(--pri)}
+.cf-s-head p{color:var(--tx2);font-size:.94rem;line-height:1.7}
+
+/* =============================================
+   LANDING: HERO
+   ============================================= */
+.cf-hero{position:relative;min-height:100vh;display:flex;align-items:center;background:var(--hero-g);overflow:hidden;padding:90px 0 70px}
+.cf-hero-c{position:relative;z-index:2;text-align:center;max-width:680px;margin:0 auto}
+.cf-hero-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 16px;border-radius:50px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.85);font-size:.76rem;font-weight:600;margin-bottom:24px;border:1px solid rgba(255,255,255,.1)}
+.cf-hero h1{font-size:clamp(2rem,5vw,3.2rem);color:#fff;margin-bottom:16px;letter-spacing:-.03em;font-weight:800}
+.cf-hero h1 .cf-grad{background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cf-hero-p{font-size:clamp(.9rem,1.6vw,1.05rem);color:rgba(255,255,255,.65);max-width:520px;margin:0 auto 32px;line-height:1.75}
+
+/* Newsletter signup in hero */
+.cf-hero-form{display:flex;gap:8px;max-width:440px;margin:0 auto 20px}
+.cf-hero-form input{flex:1;padding:13px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-family:'Inter',sans-serif;font-size:.88rem;outline:none;transition:var(--ease)}
+.cf-hero-form input::placeholder{color:rgba(255,255,255,.4)}
+.cf-hero-form input:focus{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.12)}
+.cf-hero-form button{padding:13px 24px;border-radius:8px;background:var(--gold);color:#1a1a2e;border:none;font-family:'Inter',sans-serif;font-weight:700;font-size:.86rem;cursor:pointer;transition:var(--ease);white-space:nowrap}
+.cf-hero-form button:hover{background:var(--gold-h);transform:translateY(-1px)}
+.cf-hero-form.sent input,.cf-hero-form.sent button{pointer-events:none;opacity:.5}
+
+.cf-hero-note{font-size:.74rem;color:rgba(255,255,255,.4)}
+
+.cf-hero-stats{display:flex;gap:36px;justify-content:center;margin-top:42px;flex-wrap:wrap}
+.cf-hero-stat strong{display:block;font-size:1.5rem;font-weight:800;color:#fff}
+.cf-hero-stat span{font-size:.72rem;color:rgba(255,255,255,.4)}
+
+.cf-orb{position:absolute;border-radius:50%;pointer-events:none;opacity:.05}
+.cf-orb.a{width:450px;height:450px;background:#ec4899;top:-150px;right:-100px;animation:cfF 20s ease-in-out infinite}
+.cf-orb.b{width:300px;height:300px;background:#818cf8;bottom:-100px;left:-80px;animation:cfF 24s ease-in-out infinite reverse}
+@keyframes cfF{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-30px)}}
+
+/* =============================================
+   LANDING: FEATURED ARTICLES
+   ============================================= */
+.cf-articles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.cf-article-card{background:var(--sf);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;transition:var(--ease);cursor:pointer}
+.cf-article-card:hover{transform:translateY(-4px);box-shadow:var(--sh3);border-color:transparent}
+.cf-article-img{height:160px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:rgba(255,255,255,.5)}
+.cf-article-img.i1{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.cf-article-img.i2{background:linear-gradient(135deg,#0ea5e9,#06b6d4)}
+.cf-article-img.i3{background:linear-gradient(135deg,#f59e0b,#f97316)}
+.cf-article-cat{position:absolute;top:10px;left:10px;padding:3px 10px;border-radius:50px;font-size:.65rem;font-weight:700;background:rgba(0,0,0,.4);color:#fff;backdrop-filter:blur(4px);position:relative;display:inline-block;margin:12px 0 0 16px}
+.cf-article-body{padding:16px 18px}
+.cf-article-body h3{font-size:.95rem;margin-bottom:6px;line-height:1.3}
+.cf-article-body p{font-size:.8rem;color:var(--tx3);line-height:1.55;margin-bottom:10px}
+.cf-article-meta{display:flex;align-items:center;justify-content:space-between;font-size:.7rem;color:var(--tx4)}
+.cf-article-meta span{display:flex;align-items:center;gap:4px}
+
+/* =============================================
+   LANDING: CATEGORIES
+   ============================================= */
+.cf-cats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+.cf-cat{padding:8px 18px;border-radius:50px;font-size:.78rem;font-weight:600;background:var(--sf);border:1px solid var(--bdr);color:var(--tx3);cursor:pointer;transition:var(--ease)}
+.cf-cat:hover,.cf-cat.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+
+/* =============================================
+   LANDING: NEWSLETTER CTA
+   ============================================= */
+.cf-nl{background:var(--hero-g);padding:70px 0;text-align:center;position:relative;overflow:hidden}
+.cf-nl h2{color:#fff;font-size:clamp(1.4rem,3vw,2rem);margin-bottom:12px}
+.cf-nl>div>p{color:rgba(255,255,255,.65);max-width:460px;margin:0 auto 28px;font-size:.94rem}
+
+/* =============================================
+   LANDING: PRICING
+   ============================================= */
+.cf-pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:860px;margin:0 auto}
+.cf-plan{background:var(--sf);border:1px solid var(--bdr);border-radius:var(--r);padding:28px 22px;text-align:center;transition:var(--ease);display:flex;flex-direction:column;position:relative}
+.cf-plan:hover{transform:translateY(-4px);box-shadow:var(--sh3)}
+.cf-plan.pop{border-color:var(--pri);box-shadow:0 0 0 1px var(--pri),var(--sh2)}
+.cf-plan.pop::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--pri),var(--pink));border-radius:var(--r) var(--r) 0 0}
+.cf-pop-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);padding:3px 12px;border-radius:50px;background:var(--pri);color:#fff;font-size:.65rem;font-weight:700;text-transform:uppercase}
+.cf-plan-name{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3);margin-bottom:4px}
+.cf-plan-price{font-size:2.2rem;font-weight:800;margin-bottom:2px;letter-spacing:-.03em}
+.cf-plan-price sup{font-size:.8rem;vertical-align:super}
+.cf-plan-period{font-size:.74rem;color:var(--tx4);margin-bottom:18px}
+.cf-plan-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;flex:1;text-align:left}
+.cf-plan-feats li{font-size:.8rem;color:var(--tx2);display:flex;align-items:flex-start;gap:7px}
+.cf-plan-feats li i{margin-top:3px;font-size:.7rem;flex-shrink:0}
+.cf-plan-feats li i.fa-check{color:var(--green)}
+.cf-plan-feats li i.fa-xmark{color:var(--tx4)}
+.cf-plan-feats li.dis{color:var(--tx4)}
+
+/* =============================================
+   LANDING: TESTIMONIALS
+   ============================================= */
+.cf-test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.cf-test{background:var(--sf);border:1px solid var(--bdr);border-radius:var(--r);padding:22px 20px;transition:var(--ease)}
+.cf-test:hover{transform:translateY(-3px);box-shadow:var(--sh3)}
+.cf-test-stars{color:var(--gold);font-size:.75rem;margin-bottom:10px;display:flex;gap:2px}
+.cf-test p{font-size:.84rem;color:var(--tx2);line-height:1.6;margin-bottom:14px;font-style:italic}
+.cf-test-a{display:flex;align-items:center;gap:9px}
+.cf-test-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;font-weight:700}
+.cf-test:nth-child(1) .cf-test-av{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.cf-test:nth-child(2) .cf-test-av{background:linear-gradient(135deg,#0ea5e9,#06b6d4)}
+.cf-test:nth-child(3) .cf-test-av{background:linear-gradient(135deg,#ec4899,#f43f5e)}
+.cf-test-info strong{font-size:.78rem;display:block}
+.cf-test-info span{font-size:.68rem;color:var(--tx3)}
+
+/* =============================================
+   LANDING: FAQ
+   ============================================= */
+.cf-faq-list{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.cf-faq{background:var(--sf);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
+.cf-faq:hover{border-color:var(--pri)}
+.cf-faq-q{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;font-size:.86rem;font-weight:600;gap:10px}
+.cf-faq-q i{transition:transform var(--ease);color:var(--pri);font-size:.75rem;flex-shrink:0}
+.cf-faq.open .cf-faq-q i{transform:rotate(180deg)}
+.cf-faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.cf-faq.open .cf-faq-a{max-height:300px}
+.cf-faq-a p{padding:0 20px 16px;font-size:.84rem;color:var(--tx2);line-height:1.7}
+
+/* =============================================
+   BLOG VIEW
+   ============================================= */
+.cf-blog-hero{background:var(--hero-g);padding:100px 0 50px;text-align:center}
+.cf-blog-hero .cf-article-cat{background:rgba(255,255,255,.12);color:#fff;margin:0 0 14px}
+.cf-blog-hero h1{color:#fff;font-size:clamp(1.6rem,4vw,2.4rem);max-width:640px;margin:0 auto 14px;letter-spacing:-.02em}
+.cf-blog-meta{display:flex;align-items:center;justify-content:center;gap:16px;color:rgba(255,255,255,.5);font-size:.78rem}
+.cf-blog-meta img,.cf-blog-meta-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--pink));display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;font-weight:700}
+
+.cf-blog-content{padding:50px 0 40px}
+.cf-blog-content article{font-size:1.02rem;color:var(--tx2);line-height:1.85}
+.cf-blog-content article h2{font-size:1.4rem;color:var(--tx);margin:32px 0 12px;letter-spacing:-.01em}
+.cf-blog-content article p{margin-bottom:18px}
+.cf-blog-content article blockquote{border-left:3px solid var(--pri);padding:12px 20px;margin:24px 0;background:var(--pri-g);border-radius:0 var(--rs) var(--rs) 0;font-style:italic;color:var(--tx3)}
+
+/* Share bar */
+.cf-share{display:flex;align-items:center;gap:10px;padding:20px 0;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);margin:30px 0}
+.cf-share span{font-size:.8rem;font-weight:600;color:var(--tx3)}
+.cf-share a{width:34px;height:34px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--tx3);font-size:.85rem;transition:var(--ease)}
+.cf-share a:hover{background:var(--pri);color:#fff}
+
+/* Author card */
+.cf-author{display:flex;gap:16px;padding:24px;background:var(--sf);border:1px solid var(--bdr);border-radius:var(--r);margin:30px 0}
+.cf-author-av{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--pink));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;font-weight:700;flex-shrink:0}
+.cf-author-info h4{font-size:.95rem;margin-bottom:4px}
+.cf-author-info p{font-size:.82rem;color:var(--tx3);line-height:1.55}
+
+/* Related articles */
+.cf-related{padding:40px 0}
+.cf-related h3{font-size:1.1rem;margin-bottom:20px}
+.cf-related-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.cf-related-card{display:flex;gap:14px;padding:14px;background:var(--sf);border:1px solid var(--bdr);border-radius:var(--r);cursor:pointer;transition:var(--ease)}
+.cf-related-card:hover{border-color:var(--pri);box-shadow:var(--sh2)}
+.cf-related-thumb{width:70px;height:70px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:1.2rem;flex-shrink:0}
+.cf-related-card:first-child .cf-related-thumb{background:linear-gradient(135deg,#0ea5e9,#06b6d4)}
+.cf-related-card:last-child .cf-related-thumb{background:linear-gradient(135deg,#f59e0b,#f97316)}
+.cf-related-info h4{font-size:.84rem;margin-bottom:4px;line-height:1.3}
+.cf-related-info span{font-size:.7rem;color:var(--tx4)}
+
+/* =============================================
+   DASHBOARD VIEW
+   ============================================= */
+.cf-dash{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 60px);margin-top:60px;background:var(--bg)}
+
+/* Sidebar */
+.cf-dash-side{background:var(--sf);border-right:1px solid var(--bdr);padding:20px 14px;display:flex;flex-direction:column;gap:3px}
+.cf-dash-side-logo{font-weight:800;font-size:.85rem;margin-bottom:14px;display:flex;align-items:center;gap:7px;padding:0 8px}
+.cf-dash-side-logo i{color:var(--pri);font-size:.9rem}
+.cf-side-link{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;font-size:.78rem;font-weight:500;color:var(--tx3);cursor:pointer;transition:var(--ease)}
+.cf-side-link:hover,.cf-side-link.active{background:var(--pri-g);color:var(--pri)}
+.cf-side-link i{width:15px;text-align:center;font-size:.8rem}
+.cf-side-spacer{flex:1}
+.cf-side-user{display:flex;align-items:center;gap:8px;padding:10px;border-top:1px solid var(--bdr);font-size:.76rem;color:var(--tx3)}
+.cf-side-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--pink));display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:700}
+
+/* Main */
+.cf-dash-main{padding:24px;display:flex;flex-direction:column;gap:20px;overflow-y:auto}
+.cf-dash-header{display:flex;align-items:center;justify-content:space-between}
+.cf-dash-header h2{font-size:1.2rem}
+
+/* Stats */
+.cf-dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.cf-d-stat{background:var(--sf);border:1px solid var(--bdr);border-radius:10px;padding:18px 16px}
+.cf-d-stat small{font-size:.68rem;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.cf-d-stat strong{display:block;font-size:1.4rem;font-weight:800;margin:4px 0 2px}
+.cf-d-stat .up{font-size:.7rem;color:var(--green);font-weight:600}
+
+/* Articles table */
+.cf-dash-table{background:var(--sf);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
+.cf-dash-table-head{display:grid;grid-template-columns:2fr 1fr 1fr 80px;padding:12px 18px;background:var(--bg3);font-size:.72rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em}
+.cf-dash-row{display:grid;grid-template-columns:2fr 1fr 1fr 80px;padding:14px 18px;border-top:1px solid var(--bdr);align-items:center;font-size:.82rem;transition:var(--ease)}
+.cf-dash-row:hover{background:var(--pri-g)}
+.cf-dash-row-title{font-weight:600;color:var(--tx)}
+.cf-dash-status{padding:3px 10px;border-radius:50px;font-size:.68rem;font-weight:700;display:inline-block}
+.cf-dash-status.pub{background:var(--green-g);color:var(--green)}
+.cf-dash-status.draft{background:var(--pri-g);color:var(--pri)}
+.cf-dash-status.sched{background:var(--gold-g);color:var(--gold)}
+
+/* Subscribers mini */
+.cf-dash-subs{background:var(--sf);border:1px solid var(--bdr);border-radius:var(--r);padding:20px}
+.cf-dash-subs h3{font-size:.92rem;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.cf-dash-subs h3 i{color:var(--pri)}
+.cf-sub-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:.8rem}
+.cf-sub-row:last-child{border:none}
+.cf-sub-row .email{color:var(--tx2)}
+.cf-sub-row .date{color:var(--tx4);font-size:.72rem}
+
+/* =============================================
+   FOOTER
+   ============================================= */
+.cf-footer{background:var(--bg3);border-top:1px solid var(--bdr);padding:24px 0}
+.cf-footer-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.cf-footer-copy{font-size:.74rem;color:var(--tx4)}
+.cf-footer-r{display:flex;gap:16px}
+.cf-footer-r a{font-size:.74rem;color:var(--tx3);transition:color var(--ease)}
+.cf-footer-r a:hover{color:var(--pri)}
+
+/* =============================================
+   BACK TO TOP
+   ============================================= */
+.cf-btt{position:fixed;bottom:22px;right:22px;z-index:99980;width:38px;height:38px;border-radius:50%;background:var(--pri);color:#fff;border:none;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(14px);transition:var(--ease)}
+.cf-btt.show{opacity:1;transform:translateY(0)}
+.cf-btt:hover{background:var(--pri-h)}
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+.cf-an{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.cf-an.vis{opacity:1;transform:translateY(0)}
+.cf-d1{transition-delay:.1s}.cf-d2{transition-delay:.2s}.cf-d3{transition-delay:.3s}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media(max-width:992px){
+  .cf-articles-grid,.cf-test-grid{grid-template-columns:1fr}
+  .cf-pricing{grid-template-columns:1fr;max-width:360px}
+  .cf-dash{grid-template-columns:1fr}
+  .cf-dash-side{flex-direction:row;flex-wrap:wrap;gap:4px;padding:10px;border-right:none;border-bottom:1px solid var(--bdr)}
+  .cf-dash-side-logo,.cf-side-spacer,.cf-side-user{display:none}
+  .cf-dash-stats{grid-template-columns:repeat(2,1fr)}
+  .cf-dash-table-head,.cf-dash-row{grid-template-columns:2fr 1fr 80px}
+  .cf-dash-table-head>:nth-child(3),.cf-dash-row>:nth-child(3){display:none}
+  .cf-related-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .cf-links{display:none}.cf-burg{display:block}
+  .cf-views.desk{display:none}
+  .cf-tog.desk{display:none}.cf-sep.desk{display:none}
+  .cf-s{padding:56px 0}
+  .cf-hero{min-height:auto;padding:100px 0 56px}
+  .cf-hero-form{flex-direction:column}
+  .cf-hero-stats{gap:20px}
+  .cf-footer-in{flex-direction:column;text-align:center}
+  .cf-nl{padding:50px 0}
+  .cf-author{flex-direction:column;text-align:center;align-items:center}
+  .cf-blog-hero{padding:90px 0 40px}
+  .cf-share{justify-content:center;flex-wrap:wrap}
+}
+@media(max-width:480px){.cf-w,.cf-wn{padding:0 16px}}
+</style>
+
+<!-- =============================================
+     HTML
+     ============================================= -->
+<div class="cf" id="cfApp">
+
+  <!-- PROGRESS BAR (Blog view) -->
+  <div class="cf-progress" id="cfProgress"></div>
+
+  <!-- NAV -->
+  <nav class="cf-nav" id="cfNav">
+    <div class="cf-nav-in">
+      <div class="cf-logo" onclick="cfSwitchView('landing')">
+        <span class="cf-logo-i"><i class="fas fa-feather-pointed"></i></span>
+        Content<em>Forge</em>
+      </div>
+      <div class="cf-views desk" id="cfViewBtns">
+        <button class="cf-view-btn active" onclick="cfSwitchView('landing')" data-i18n="v_home">Inicio</button>
+        <button class="cf-view-btn" onclick="cfSwitchView('blog')" data-i18n="v_blog">Blog</button>
+        <button class="cf-view-btn" onclick="cfSwitchView('dash')" data-i18n="v_dash">Dashboard</button>
+      </div>
+      <div class="cf-nav-r">
+        <div class="cf-tog desk"><span>ES</span><label class="cf-sw"><input type="checkbox" id="cfLang"><span class="cf-sli"></span></label><span>EN</span></div>
+        <div class="cf-sep desk"></div>
+        <div class="cf-tog desk"><span>☀️</span><label class="cf-sw"><input type="checkbox" id="cfTheme"><span class="cf-sli"></span></label><span>🌙</span></div>
+        <button class="cf-burg" id="cfBurg"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE -->
+  <div class="cf-mob" id="cfMob">
+    <button class="cf-mob-x" id="cfMobX"><i class="fas fa-xmark"></i></button>
+    <a onclick="cfSwitchView('landing');document.getElementById('cfMob').classList.remove('open')" data-i18n="v_home">Inicio</a>
+    <a onclick="cfSwitchView('blog');document.getElementById('cfMob').classList.remove('open')" data-i18n="v_blog">Blog</a>
+    <a onclick="cfSwitchView('dash');document.getElementById('cfMob').classList.remove('open')" data-i18n="v_dash">Dashboard</a>
+    <div class="cf-mob-ctrls">
+      <div class="cf-tog"><span>ES</span><label class="cf-sw"><input type="checkbox" class="cfLangS"><span class="cf-sli"></span></label><span>EN</span></div>
+      <div class="cf-tog"><span>☀️</span><label class="cf-sw"><input type="checkbox" class="cfThemeS"><span class="cf-sli"></span></label><span>🌙</span></div>
+      <div class="cf-views" style="margin-top:8px">
+        <button class="cf-view-btn active" onclick="cfSwitchView('landing');document.getElementById('cfMob').classList.remove('open')" data-i18n="v_home">Inicio</button>
+        <button class="cf-view-btn" onclick="cfSwitchView('blog');document.getElementById('cfMob').classList.remove('open')" data-i18n="v_blog">Blog</button>
+        <button class="cf-view-btn" onclick="cfSwitchView('dash');document.getElementById('cfMob').classList.remove('open')" data-i18n="v_dash">Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================================
+       VIEW 1: LANDING
+       ============================================= -->
+  <div class="cf-view active" id="cfLanding">
+
+    <!-- Hero -->
+    <section class="cf-hero">
+      <div class="cf-orb a"></div><div class="cf-orb b"></div>
+      <div class="cf-w">
+        <div class="cf-hero-c">
+          <div class="cf-hero-badge" data-i18n="hero_badge">✍️ Plataforma para Creadores de Contenido</div>
+          <h1><span data-i18n="hero_t1">Tu Blog y Newsletter</span><br><span class="cf-grad" data-i18n="hero_t2">en una Sola Plataforma</span></h1>
+          <p class="cf-hero-p" data-i18n="hero_sub">Publicá artículos, construí tu audiencia y monetizá tu contenido. Sin intermediarios, sin comisiones. Tu plataforma, tus reglas.</p>
+          <div class="cf-hero-form" id="cfHeroForm">
+            <input type="email" id="cfHeroEmail" data-i18n-ph="hero_ph" placeholder="Tu email para empezar...">
+            <button id="cfHeroBtn" data-i18n="hero_cta">Empezar Gratis 🚀</button>
+          </div>
+          <p class="cf-hero-note" data-i18n="hero_note">Gratis para siempre. Sin tarjeta de crédito.</p>
+          <div class="cf-hero-stats">
+            <div class="cf-hero-stat"><strong>25K+</strong><span data-i18n="st_1">Creadores</span></div>
+            <div class="cf-hero-stat"><strong>1.2M</strong><span data-i18n="st_2">Suscriptores</span></div>
+            <div class="cf-hero-stat"><strong>$840K</strong><span data-i18n="st_3">Generado por creadores</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Articles -->
+    <section class="cf-s" id="cf-articles">
+      <div class="cf-w">
+        <div class="cf-s-head cf-an">
+          <span class="cf-s-tag" data-i18n="art_tag">ARTÍCULOS DESTACADOS</span>
+          <h2 data-i18n="art_title">Contenido que <span>inspira</span></h2>
+        </div>
+        <div class="cf-cats cf-an">
+          <span class="cf-cat active" data-i18n="cat_all">Todos</span>
+          <span class="cf-cat" data-i18n="cat_tech">Tecnología</span>
+          <span class="cf-cat" data-i18n="cat_biz">Negocios</span>
+          <span class="cf-cat" data-i18n="cat_design">Diseño</span>
+          <span class="cf-cat" data-i18n="cat_life">Lifestyle</span>
+        </div>
+        <div class="cf-articles-grid">
+          <div class="cf-article-card cf-an cf-d1" onclick="cfSwitchView('blog')">
+            <div class="cf-article-img i1"><i class="fas fa-brain"></i></div>
+            <span class="cf-article-cat" data-i18n="cat_tech">Tecnología</span>
+            <div class="cf-article-body">
+              <h3 data-i18n="a1_t">Cómo la IA está Transformando la Creación de Contenido en 2025</h3>
+              <p data-i18n="a1_d">Exploramos las herramientas y tendencias que están revolucionando la forma en que los creadores producen contenido.</p>
+              <div class="cf-article-meta"><span><i class="far fa-clock"></i> 8 min</span><span><i class="far fa-eye"></i> 12.4K</span></div>
+            </div>
+          </div>
+          <div class="cf-article-card cf-an cf-d2" onclick="cfSwitchView('blog')">
+            <div class="cf-article-img i2"><i class="fas fa-chart-line"></i></div>
+            <span class="cf-article-cat" data-i18n="cat_biz">Negocios</span>
+            <div class="cf-article-body">
+              <h3 data-i18n="a2_t">De 0 a 10K Suscriptores: Guía Completa para Newsletters</h3>
+              <p data-i18n="a2_d">Estrategias probadas para hacer crecer tu lista de suscriptores y convertirla en un negocio rentable.</p>
+              <div class="cf-article-meta"><span><i class="far fa-clock"></i> 12 min</span><span><i class="far fa-eye"></i> 8.7K</span></div>
+            </div>
+          </div>
+          <div class="cf-article-card cf-an cf-d3" onclick="cfSwitchView('blog')">
+            <div class="cf-article-img i3"><i class="fas fa-palette"></i></div>
+            <span class="cf-article-cat" data-i18n="cat_design">Diseño</span>
+            <div class="cf-article-body">
+              <h3 data-i18n="a3_t">Tipografía para Blogs: Guía Definitiva para Legibilidad</h3>
+              <p data-i18n="a3_d">Las mejores prácticas de tipografía web para que tus lectores disfruten cada palabra que escribas.</p>
+              <div class="cf-article-meta"><span><i class="far fa-clock"></i> 6 min</span><span><i class="far fa-eye"></i> 5.2K</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="cf-s cf-s-alt" id="cf-pricing">
+      <div class="cf-w">
+        <div class="cf-s-head cf-an">
+          <span class="cf-s-tag" data-i18n="price_tag">PRECIOS</span>
+          <h2 data-i18n="price_title">Planes para cada <span>creador</span></h2>
+          <p data-i18n="price_sub">Empezá gratis. Escalá cuando quieras.</p>
+        </div>
+        <div class="cf-pricing">
+          <div class="cf-plan cf-an cf-d1">
+            <div class="cf-plan-name" data-i18n="pl_free">GRATIS</div>
+            <div class="cf-plan-price"><sup>$</sup>0</div>
+            <div class="cf-plan-period" data-i18n="pl_mo">por mes</div>
+            <ul class="cf-plan-feats">
+              <li><i class="fas fa-check"></i><span data-i18n="pf1">Blog ilimitado</span></li>
+              <li><i class="fas fa-check"></i><span data-i18n="pf2">500 suscriptores</span></li>
+              <li><i class="fas fa-check"></i><span data-i18n="pf3">Dominio personalizado</span></li>
+              <li class="dis"><i class="fas fa-xmark"></i><span data-i18n="pf4">Newsletter avanzado</span></li>
+              <li class="dis"><i class="fas fa-xmark"></i><span data-i18n="pf5">Monetización</span></li>
+            </ul>
+            <a href="#" class="cf-btn cf-btn-ghost" style="width:100%;justify-content:center" data-i18n="pl_start">Empezar Gratis</a>
+          </div>
+          <div class="cf-plan pop cf-an cf-d2">
+            <div class="cf-pop-badge" data-i18n="pl_pop">MÁS POPULAR</div>
+            <div class="cf-plan-name">CREATOR PRO</div>
+            <div class="cf-plan-price"><sup>$</sup>12</div>
+            <div class="cf-plan-period" data-i18n="pl_mo">por mes</div>
+            <ul class="cf-plan-feats">
+              <li><i class="fas fa-check"></i><span data-i18n="pp1">Blog ilimitado</span></li>
+              <li><i class="fas fa-check"></i><span data-i18n="pp2">10,000 suscriptores</span></li>
+              <li><i class="fas fa-check"></i><span data-i18n="pp3">Newsletter automatizado</span></li>
+              <li><i class="fas fa-check"></i><span data-i18n="pp4">Monetización integrada</span></li>
+              <li><i class="fas fa-check"></i><span data-i18n="pp5">Analytics avanzados</span></li>
+            </ul>
+            <a href="#" class="cf-btn cf-btn-pri" style="width:100%;justify-content:center" data-i18n="pl_get">Obtener Pro</a>
+          </div>
+          <div class="cf-plan cf-an cf-d3">
+            <div class="cf-plan-name">BUSINESS</div>
+            <div class="cf-plan-price"><sup>$</sup>49</div>
+            <div class="cf-plan-period" data-i18n="pl_mo">por mes</div>
+            <ul class="cf-plan-feats">
+              <li><i class="fas fa-check"></i><span data-i18n="pe1">Todo ilimitado</span></li>
+              <li><i class="fas fa-check"></i><span data-i18n="pe2">Suscriptores ilimitados</span></li>
+              <li><i class="fas fa-check"></i><span data-i18n="pe3">Multi-autor</span></li>
+              <li><i class="fas fa-check"></i><span data-i18n="pe4">API completa</span></li>
+              <li><i class="fas fa-check"></i><span data-i18n="pe5">Soporte prioritario</span></li>
+            </ul>
+            <a href="#" class="cf-btn cf-btn-ghost" style="width:100%;justify-content:center" data-i18n="pl_contact">Contactar</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="cf-s" id="cf-test">
+      <div class="cf-w">
+        <div class="cf-s-head cf-an">
+          <span class="cf-s-tag" data-i18n="test_tag">TESTIMONIOS</span>
+          <h2 data-i18n="test_title">Creadores que <span>confían en nosotros</span></h2>
+        </div>
+        <div class="cf-test-grid">
+          <div class="cf-test cf-an cf-d1">
+            <div class="cf-test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p data-i18n="t1">"Migré de Substack y mis ingresos crecieron un 40% al no pagar comisiones. La mejor decisión que tomé."</p>
+            <div class="cf-test-a"><div class="cf-test-av">EM</div><div class="cf-test-info"><strong>Elena Martínez</strong><span data-i18n="t1r">Newsletter de Finanzas</span></div></div>
+          </div>
+          <div class="cf-test cf-an cf-d2">
+            <div class="cf-test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p data-i18n="t2">"El dashboard es increíble. Puedo ver exactamente qué contenido funciona y optimizar mi estrategia en tiempo real."</p>
+            <div class="cf-test-a"><div class="cf-test-av">JW</div><div class="cf-test-info"><strong>James Wilson</strong><span data-i18n="t2r">Tech Blogger</span></div></div>
+          </div>
+          <div class="cf-test cf-an cf-d3">
+            <div class="cf-test-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p data-i18n="t3">"Pasé de 0 a 8,000 suscriptores en 4 meses. La herramienta de newsletter es simplemente perfecta."</p>
+            <div class="cf-test-a"><div class="cf-test-av">LK</div><div class="cf-test-info"><strong>Laura Kim</strong><span data-i18n="t3r">Lifestyle Creator</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="cf-s cf-s-alt" id="cf-faq">
+      <div class="cf-w">
+        <div class="cf-s-head cf-an"><span class="cf-s-tag">FAQ</span><h2 data-i18n="faq_t">Preguntas <span>Frecuentes</span></h2></div>
+        <div class="cf-faq-list">
+          <div class="cf-faq cf-an cf-d1"><div class="cf-faq-q" onclick="this.parentElement.classList.toggle('open')"><span data-i18n="fq1_q">¿Puedo migrar mi blog existente?</span><i class="fas fa-chevron-down"></i></div><div class="cf-faq-a"><p data-i18n="fq1_a">Sí. Ofrecemos importación desde WordPress, Substack, Medium y Ghost. Tu contenido y suscriptores se migran en minutos.</p></div></div>
+          <div class="cf-faq cf-an cf-d2"><div class="cf-faq-q" onclick="this.parentElement.classList.toggle('open')"><span data-i18n="fq2_q">¿Cómo funciona la monetización?</span><i class="fas fa-chevron-down"></i></div><div class="cf-faq-a"><p data-i18n="fq2_a">Podés cobrar suscripciones mensuales o anuales a tus lectores. Conectás Stripe y recibís los pagos directamente. Sin comisiones de nuestra parte en el plan Pro.</p></div></div>
+          <div class="cf-faq cf-an cf-d3"><div class="cf-faq-q" onclick="this.parentElement.classList.toggle('open')"><span data-i18n="fq3_q">¿Puedo usar mi propio dominio?</span><i class="fas fa-chevron-down"></i></div><div class="cf-faq-a"><p data-i18n="fq3_a">Sí, desde el plan gratuito. Conectás tu dominio en menos de 5 minutos con nuestra guía paso a paso.</p></div></div>
+          <div class="cf-faq cf-an cf-d1"><div class="cf-faq-q" onclick="this.parentElement.classList.toggle('open')"><span data-i18n="fq4_q">¿Hay límite de artículos?</span><i class="fas fa-chevron-down"></i></div><div class="cf-faq-a"><p data-i18n="fq4_a">No. Todos los planes incluyen artículos ilimitados. Publicá todo lo que quieras, sin restricciones.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter CTA -->
+    <section class="cf-nl">
+      <div class="cf-w">
+        <h2 data-i18n="nl_t">Empezá a Crear <em style="font-style:normal;color:#fbbf24">Hoy</em></h2>
+        <p data-i18n="nl_d">Unite a miles de creadores que ya monetizan su contenido con ContentForge.</p>
+        <a href="#" class="cf-btn cf-btn-gold cf-btn-lg" data-i18n="nl_cta">🚀 Crear mi Blog Gratis</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- =============================================
+       VIEW 2: BLOG ARTICLE
+       ============================================= -->
+  <div class="cf-view" id="cfBlog">
+    <div class="cf-blog-hero">
+      <div class="cf-w">
+        <span class="cf-article-cat" data-i18n="cat_tech">Tecnología</span>
+        <h1 data-i18n="blog_title">Cómo la IA está Transformando la Creación de Contenido en 2025</h1>
+        <div class="cf-blog-meta">
+          <span class="cf-blog-meta-av">SC</span>
+          <span>Sarah Chen</span>
+          <span>•</span>
+          <span data-i18n="blog_date">15 Enero, 2025</span>
+          <span>•</span>
+          <span>8 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="cf-blog-content">
+      <div class="cf-wn">
+        <article>
+          <p data-i18n="bp1">La inteligencia artificial no es solo una tendencia tecnológica más. Es una revolución que está cambiando fundamentalmente la forma en que creamos, distribuimos y consumimos contenido digital. En este artículo, exploramos las herramientas, tendencias y estrategias que están definiendo el futuro de la creación de contenido.</p>
+
+          <h2 data-i18n="bh1">El Nuevo Paradigma del Contenido</h2>
+          <p data-i18n="bp2">Durante décadas, crear contenido de calidad requería horas de investigación, redacción y edición. Hoy, las herramientas de IA pueden generar borradores, sugerir mejoras y optimizar textos en cuestión de segundos. Pero esto no significa que los creadores humanos sean obsoletos — todo lo contrario.</p>
+          <p data-i18n="bp3">Los creadores que adoptan la IA como herramienta están produciendo más contenido, de mayor calidad, y en menos tiempo. No se trata de reemplazar la creatividad humana, sino de amplificarla.</p>
+
+          <blockquote data-i18n="bq1">"La IA no reemplaza a los creadores. Los creadores que usan IA reemplazan a los que no la usan."</blockquote>
+
+          <h2 data-i18n="bh2">Herramientas que Están Liderando el Cambio</h2>
+          <p data-i18n="bp4">Desde generadores de texto como GPT-4 y Claude, hasta herramientas de diseño como Midjourney y DALL-E, el ecosistema de IA para creadores nunca fue tan robusto. La clave está en saber cuándo y cómo usar cada herramienta para maximizar la calidad sin sacrificar la autenticidad.</p>
+          <p data-i18n="bp5">Las plataformas como ContentForge están integrando estas capacidades directamente en el flujo de trabajo del creador, eliminando la fricción entre la ideación y la publicación.</p>
+
+          <h2 data-i18n="bh3">El Futuro es Ahora</h2>
+          <p data-i18n="bp6">La creator economy ya genera más de $100 mil millones anuales a nivel global. Los creadores independientes están construyendo negocios rentables con newsletters, blogs y cursos online. La IA está acelerando este proceso, permitiendo que más personas conviertan su conocimiento en ingresos sostenibles.</p>
+        </article>
+
+        <!-- Share -->
+        <div class="cf-share">
+          <span data-i18n="share">Compartir:</span>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fas fa-link"></i></a>
+        </div>
+
+        <!-- Author -->
+        <div class="cf-author">
+          <div class="cf-author-av">SC</div>
+          <div class="cf-author-info">
+            <h4>Sarah Chen</h4>
+            <p data-i18n="author_bio">Periodista tech y creadora de contenido con más de 50K suscriptores. Escribe sobre la intersección entre inteligencia artificial, productividad y creator economy.</p>
+          </div>
+        </div>
+
+        <!-- Related -->
+        <div class="cf-related">
+          <h3 data-i18n="related">Artículos Relacionados</h3>
+          <div class="cf-related-grid">
+            <div class="cf-related-card" onclick="cfSwitchView('blog')">
+              <div class="cf-related-thumb"><i class="fas fa-chart-line"></i></div>
+              <div class="cf-related-info"><h4 data-i18n="rel1_t">De 0 a 10K Suscriptores: Guía Completa</h4><span>12 min • 8.7K views</span></div>
+            </div>
+            <div class="cf-related-card" onclick="cfSwitchView('blog')">
+              <div class="cf-related-thumb"><i class="fas fa-palette"></i></div>
+              <div class="cf-related-info"><h4 data-i18n="rel2_t">Tipografía para Blogs: Guía Definitiva</h4><span>6 min • 5.2K views</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;padding:20px 0">
+          <button class="cf-btn cf-btn-ghost" onclick="cfSwitchView('landing')" data-i18n="back_home">← Volver al Inicio</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================================
+       VIEW 3: DASHBOARD
+       ============================================= -->
+  <div class="cf-view" id="cfDash">
+    <div class="cf-dash">
+      <div class="cf-dash-side">
+        <div class="cf-dash-side-logo"><i class="fas fa-feather-pointed"></i> ContentForge</div>
+        <div class="cf-side-link active"><i class="fas fa-chart-bar"></i> <span data-i18n="d_overview">Resumen</span></div>
+        <div class="cf-side-link"><i class="fas fa-file-lines"></i> <span data-i18n="d_articles">Artículos</span></div>
+        <div class="cf-side-link"><i class="fas fa-paper-plane"></i> <span data-i18n="d_news">Newsletter</span></div>
+        <div class="cf-side-link"><i class="fas fa-users"></i> <span data-i18n="d_subs">Suscriptores</span></div>
+        <div class="cf-side-link"><i class="fas fa-dollar-sign"></i> <span data-i18n="d_revenue">Ingresos</span></div>
+        <div class="cf-side-link"><i class="fas fa-chart-pie"></i> Analytics</div>
+        <div class="cf-side-spacer"></div>
+        <div class="cf-side-link"><i class="fas fa-gear"></i> <span data-i18n="d_settings">Configuración</span></div>
+        <div class="cf-side-user"><div class="cf-side-av">SC</div> Sarah Chen</div>
+      </div>
+      <div class="cf-dash-main">
+        <div class="cf-dash-header">
+          <h2 data-i18n="d_hi">¡Hola, Sarah! 👋</h2>
+          <button class="cf-btn cf-btn-pri cf-btn-sm" data-i18n="d_new">+ Nuevo Artículo</button>
+        </div>
+
+        <div class="cf-dash-stats">
+          <div class="cf-d-stat"><small data-i18n="ds_views">Visitas hoy</small><strong>3,847</strong><span class="up">↑ 22%</span></div>
+          <div class="cf-d-stat"><small data-i18n="ds_subs">Suscriptores</small><strong>12,458</strong><span class="up">↑ 156 nuevos</span></div>
+          <div class="cf-d-stat"><small data-i18n="ds_open">Open Rate</small><strong>58.4%</strong><span class="up">↑ 3.2%</span></div>
+          <div class="cf-d-stat"><small data-i18n="ds_rev">Ingresos mes</small><strong>$2,840</strong><span class="up">↑ 18%</span></div>
+        </div>
+
+        <div class="cf-dash-table">
+          <div class="cf-dash-table-head">
+            <span data-i18n="dt_title">Artículo</span>
+            <span data-i18n="dt_status">Estado</span>
+            <span data-i18n="dt_views">Visitas</span>
+            <span data-i18n="dt_date">Fecha</span>
+          </div>
+          <div class="cf-dash-row"><span class="cf-dash-row-title" data-i18n="dr1_t">Cómo la IA está Transformando el Contenido</span><span><span class="cf-dash-status pub" data-i18n="st_pub">Publicado</span></span><span>12.4K</span><span>15 Ene</span></div>
+          <div class="cf-dash-row"><span class="cf-dash-row-title" data-i18n="dr2_t">De 0 a 10K Suscriptores</span><span><span class="cf-dash-status pub" data-i18n="st_pub">Publicado</span></span><span>8.7K</span><span>12 Ene</span></div>
+          <div class="cf-dash-row"><span class="cf-dash-row-title" data-i18n="dr3_t">Tipografía para Blogs</span><span><span class="cf-dash-status pub" data-i18n="st_pub">Publicado</span></span><span>5.2K</span><span>8 Ene</span></div>
+          <div class="cf-dash-row"><span class="cf-dash-row-title" data-i18n="dr4_t">SEO para Newsletters en 2025</span><span><span class="cf-dash-status draft" data-i18n="st_draft">Borrador</span></span><span>—</span><span>—</span></div>
+          <div class="cf-dash-row"><span class="cf-dash-row-title" data-i18n="dr5_t">Monetización: Guía Avanzada</span><span><span class="cf-dash-status sched" data-i18n="st_sched">Programado</span></span><span>—</span><span>20 Ene</span></div>
+        </div>
+
+        <div class="cf-dash-subs">
+          <h3><i class="fas fa-users"></i> <span data-i18n="ds_recent">Suscriptores recientes</span></h3>
+          <div class="cf-sub-row"><span class="email">john.doe@gmail.com</span><span class="date" data-i18n="ds_today">Hoy</span></div>
+          <div class="cf-sub-row"><span class="email">maria.garcia@outlook.com</span><span class="date" data-i18n="ds_today">Hoy</span></div>
+          <div class="cf-sub-row"><span class="email">alex.turner@yahoo.com</span><span class="date" data-i18n="ds_yest">Ayer</span></div>
+          <div class="cf-sub-row"><span class="email">li.wei@proton.me</span><span class="date" data-i18n="ds_yest">Ayer</span></div>
+          <div class="cf-sub-row"><span class="email">emma.johnson@icloud.com</span><span class="date">13 Ene</span></div>
+        </div>
+
+        <div style="text-align:center;padding:10px 0">
+          <button class="cf-btn cf-btn-ghost cf-btn-sm" onclick="cfSwitchView('landing')" data-i18n="back_home">← Volver al Inicio</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="cf-footer" id="cfFooter">
+    <div class="cf-w">
+      <div class="cf-footer-in">
+        <span class="cf-footer-copy">© 2025 ContentForge. <span data-i18n="ftr_r">Todos los derechos reservados.</span></span>
+        <div class="cf-footer-r">
+          <a href="#" data-i18n="ftr_terms">Términos</a>
+          <a href="#" data-i18n="ftr_priv">Privacidad</a>
+          <a href="#" data-i18n="ftr_contact">Contacto</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="cf-btt" id="cfBtt"><i class="fas fa-arrow-up"></i></button>
+</div>
+
+<script>
+(function(){
+  const T={
+    es:{
+      v_home:"Inicio",v_blog:"Blog",v_dash:"Dashboard",
+      hero_badge:"✍️ Plataforma para Creadores de Contenido",hero_t1:"Tu Blog y Newsletter",hero_t2:"en una Sola Plataforma",
+      hero_sub:"Publicá artículos, construí tu audiencia y monetizá tu contenido. Sin intermediarios, sin comisiones. Tu plataforma, tus reglas.",
+      hero_ph:"Tu email para empezar...",hero_cta:"Empezar Gratis 🚀",hero_note:"Gratis para siempre. Sin tarjeta de crédito.",hero_sent:"✅ ¡Listo! Revisá tu email.",
+      st_1:"Creadores",st_2:"Suscriptores",st_3:"Generado por creadores",
+      art_tag:"ARTÍCULOS DESTACADOS",art_title:'Contenido que <span>inspira</span>',
+      cat_all:"Todos",cat_tech:"Tecnología",cat_biz:"Negocios",cat_design:"Diseño",cat_life:"Lifestyle",
+      a1_t:"Cómo la IA está Transformando la Creación de Contenido en 2025",a1_d:"Exploramos las herramientas y tendencias que están revolucionando la forma en que los creadores producen contenido.",
+      a2_t:"De 0 a 10K Suscriptores: Guía Completa para Newsletters",a2_d:"Estrategias probadas para hacer crecer tu lista de suscriptores y convertirla en un negocio rentable.",
+      a3_t:"Tipografía para Blogs: Guía Definitiva para Legibilidad",a3_d:"Las mejores prácticas de tipografía web para que tus lectores disfruten cada palabra que escribas.",
+      price_tag:"PRECIOS",price_title:'Planes para cada <span>creador</span>',price_sub:"Empezá gratis. Escalá cuando quieras.",
+      pl_free:"GRATIS",pl_mo:"por mes",pl_pop:"MÁS POPULAR",pl_start:"Empezar Gratis",pl_get:"Obtener Pro",pl_contact:"Contactar",
+      pf1:"Blog ilimitado",pf2:"500 suscriptores",pf3:"Dominio personalizado",pf4:"Newsletter avanzado",pf5:"Monetización",
+      pp1:"Blog ilimitado",pp2:"10,000 suscriptores",pp3:"Newsletter automatizado",pp4:"Monetización integrada",pp5:"Analytics avanzados",
+      pe1:"Todo ilimitado",pe2:"Suscriptores ilimitados",pe3:"Multi-autor",pe4:"API completa",pe5:"Soporte prioritario",
+      test_tag:"TESTIMONIOS",test_title:'Creadores que <span>confían en nosotros</span>',
+      t1:'"Migré de Substack y mis ingresos crecieron un 40% al no pagar comisiones. La mejor decisión que tomé."',t1r:"Newsletter de Finanzas",
+      t2:'"El dashboard es increíble. Puedo ver exactamente qué contenido funciona y optimizar mi estrategia en tiempo real."',t2r:"Tech Blogger",
+      t3:'"Pasé de 0 a 8,000 suscriptores en 4 meses. La herramienta de newsletter es simplemente perfecta."',t3r:"Lifestyle Creator",
+      faq_t:'Preguntas <span>Frecuentes</span>',
+      fq1_q:"¿Puedo migrar mi blog existente?",fq1_a:"Sí. Ofrecemos importación desde WordPress, Substack, Medium y Ghost. Tu contenido y suscriptores se migran en minutos.",
+      fq2_q:"¿Cómo funciona la monetización?",fq2_a:"Podés cobrar suscripciones mensuales o anuales a tus lectores. Conectás Stripe y recibís los pagos directamente. Sin comisiones de nuestra parte en el plan Pro.",
+      fq3_q:"¿Puedo usar mi propio dominio?",fq3_a:"Sí, desde el plan gratuito. Conectás tu dominio en menos de 5 minutos con nuestra guía paso a paso.",
+      fq4_q:"¿Hay límite de artículos?",fq4_a:"No. Todos los planes incluyen artículos ilimitados. Publicá todo lo que quieras, sin restricciones.",
+      nl_t:'Empezá a Crear <em style="font-style:normal;color:#fbbf24">Hoy</em>',nl_d:"Unite a miles de creadores que ya monetizan su contenido con ContentForge.",nl_cta:"🚀 Crear mi Blog Gratis",
+      blog_title:"Cómo la IA está Transformando la Creación de Contenido en 2025",blog_date:"15 Enero, 2025",
+      bp1:"La inteligencia artificial no es solo una tendencia tecnológica más. Es una revolución que está cambiando fundamentalmente la forma en que creamos, distribuimos y consumimos contenido digital.",
+      bh1:"El Nuevo Paradigma del Contenido",bp2:"Durante décadas, crear contenido de calidad requería horas de investigación, redacción y edición. Hoy, las herramientas de IA pueden generar borradores, sugerir mejoras y optimizar textos en cuestión de segundos.",
+      bp3:"Los creadores que adoptan la IA como herramienta están produciendo más contenido, de mayor calidad, y en menos tiempo.",
+      bq1:'"La IA no reemplaza a los creadores. Los creadores que usan IA reemplazan a los que no la usan."',
+      bh2:"Herramientas que Están Liderando el Cambio",bp4:"Desde generadores de texto como GPT-4 y Claude, hasta herramientas de diseño como Midjourney y DALL-E, el ecosistema de IA para creadores nunca fue tan robusto.",
+      bp5:"Las plataformas como ContentForge están integrando estas capacidades directamente en el flujo de trabajo del creador.",
+      bh3:"El Futuro es Ahora",bp6:"La creator economy ya genera más de $100 mil millones anuales. Los creadores independientes están construyendo negocios rentables con newsletters, blogs y cursos online.",
+      share:"Compartir:",author_bio:"Periodista tech y creadora de contenido con más de 50K suscriptores. Escribe sobre IA, productividad y creator economy.",
+      related:"Artículos Relacionados",rel1_t:"De 0 a 10K Suscriptores: Guía Completa",rel2_t:"Tipografía para Blogs: Guía Definitiva",back_home:"← Volver al Inicio",
+      d_overview:"Resumen",d_articles:"Artículos",d_news:"Newsletter",d_subs:"Suscriptores",d_revenue:"Ingresos",d_settings:"Configuración",
+      d_hi:"¡Hola, Sarah! 👋",d_new:"+ Nuevo Artículo",
+      ds_views:"Visitas hoy",ds_subs:"Suscriptores",ds_open:"Open Rate",ds_rev:"Ingresos mes",
+      dt_title:"Artículo",dt_status:"Estado",dt_views:"Visitas",dt_date:"Fecha",
+      dr1_t:"Cómo la IA está Transformando el Contenido",dr2_t:"De 0 a 10K Suscriptores",dr3_t:"Tipografía para Blogs",dr4_t:"SEO para Newsletters en 2025",dr5_t:"Monetización: Guía Avanzada",
+      st_pub:"Publicado",st_draft:"Borrador",st_sched:"Programado",
+      ds_recent:"Suscriptores recientes",ds_today:"Hoy",ds_yest:"Ayer",
+      ftr_r:"Todos los derechos reservados.",ftr_terms:"Términos",ftr_priv:"Privacidad",ftr_contact:"Contacto"
+    },
+    en:{
+      v_home:"Home",v_blog:"Blog",v_dash:"Dashboard",
+      hero_badge:"✍️ Platform for Content Creators",hero_t1:"Your Blog and Newsletter",hero_t2:"in One Platform",
+      hero_sub:"Publish articles, build your audience, and monetize your content. No middlemen, no commissions. Your platform, your rules.",
+      hero_ph:"Your email to get started...",hero_cta:"Start Free 🚀",hero_note:"Free forever. No credit card required.",hero_sent:"✅ Done! Check your email.",
+      st_1:"Creators",st_2:"Subscribers",st_3:"Generated by creators",
+      art_tag:"FEATURED ARTICLES",art_title:'Content that <span>inspires</span>',
+      cat_all:"All",cat_tech:"Technology",cat_biz:"Business",cat_design:"Design",cat_life:"Lifestyle",
+      a1_t:"How AI is Transforming Content Creation in 2025",a1_d:"We explore the tools and trends revolutionizing how creators produce content.",
+      a2_t:"From 0 to 10K Subscribers: Complete Newsletter Guide",a2_d:"Proven strategies to grow your subscriber list and turn it into a profitable business.",
+      a3_t:"Blog Typography: The Definitive Readability Guide",a3_d:"Best web typography practices so your readers enjoy every word you write.",
+      price_tag:"PRICING",price_title:'Plans for every <span>creator</span>',price_sub:"Start free. Scale when you want.",
+      pl_free:"FREE",pl_mo:"per month",pl_pop:"MOST POPULAR",pl_start:"Start Free",pl_get:"Get Pro",pl_contact:"Contact",
+      pf1:"Unlimited blog",pf2:"500 subscribers",pf3:"Custom domain",pf4:"Advanced newsletter",pf5:"Monetization",
+      pp1:"Unlimited blog",pp2:"10,000 subscribers",pp3:"Automated newsletter",pp4:"Built-in monetization",pp5:"Advanced analytics",
+      pe1:"Everything unlimited",pe2:"Unlimited subscribers",pe3:"Multi-author",pe4:"Full API",pe5:"Priority support",
+      test_tag:"TESTIMONIALS",test_title:'Creators who <span>trust us</span>',
+      t1:'"I migrated from Substack and my revenue grew 40% by not paying commissions. Best decision I made."',t1r:"Finance Newsletter",
+      t2:'"The dashboard is incredible. I can see exactly what content works and optimize my strategy in real time."',t2r:"Tech Blogger",
+      t3:'"I went from 0 to 8,000 subscribers in 4 months. The newsletter tool is simply perfect."',t3r:"Lifestyle Creator",
+      faq_t:'Frequently Asked <span>Questions</span>',
+      fq1_q:"Can I migrate my existing blog?",fq1_a:"Yes. We offer import from WordPress, Substack, Medium, and Ghost. Your content and subscribers migrate in minutes.",
+      fq2_q:"How does monetization work?",fq2_a:"You can charge monthly or annual subscriptions to your readers. Connect Stripe and receive payments directly. No commissions from us on the Pro plan.",
+      fq3_q:"Can I use my own domain?",fq3_a:"Yes, from the free plan. Connect your domain in less than 5 minutes with our step-by-step guide.",
+      fq4_q:"Is there an article limit?",fq4_a:"No. All plans include unlimited articles. Publish as much as you want, no restrictions.",
+      nl_t:'Start Creating <em style="font-style:normal;color:#fbbf24">Today</em>',nl_d:"Join thousands of creators already monetizing their content with ContentForge.",nl_cta:"🚀 Create My Free Blog",
+      blog_title:"How AI is Transforming Content Creation in 2025",blog_date:"January 15, 2025",
+      bp1:"Artificial intelligence is not just another tech trend. It's a revolution fundamentally changing how we create, distribute, and consume digital content.",
+      bh1:"The New Content Paradigm",bp2:"For decades, creating quality content required hours of research, writing, and editing. Today, AI tools can generate drafts, suggest improvements, and optimize text in seconds.",
+      bp3:"Creators who adopt AI as a tool are producing more content, of higher quality, in less time.",
+      bq1:'"AI doesn\'t replace creators. Creators who use AI replace those who don\'t."',
+      bh2:"Tools Leading the Change",bp4:"From text generators like GPT-4 and Claude to design tools like Midjourney and DALL-E, the AI ecosystem for creators has never been more robust.",
+      bp5:"Platforms like ContentForge are integrating these capabilities directly into the creator's workflow.",
+      bh3:"The Future is Now",bp6:"The creator economy already generates over $100 billion annually worldwide. Independent creators are building profitable businesses with newsletters, blogs, and online courses.",
+      share:"Share:",author_bio:"Tech journalist and content creator with 50K+ subscribers. Writes about AI, productivity, and the creator economy.",
+      related:"Related Articles",rel1_t:"From 0 to 10K Subscribers: Complete Guide",rel2_t:"Blog Typography: The Definitive Guide",back_home:"← Back to Home",
+      d_overview:"Overview",d_articles:"Articles",d_news:"Newsletter",d_subs:"Subscribers",d_revenue:"Revenue",d_settings:"Settings",
+      d_hi:"Hi, Sarah! 👋",d_new:"+ New Article",
+      ds_views:"Views today",ds_subs:"Subscribers",ds_open:"Open Rate",ds_rev:"Monthly revenue",
+      dt_title:"Article",dt_status:"Status",dt_views:"Views",dt_date:"Date",
+      dr1_t:"How AI is Transforming Content",dr2_t:"From 0 to 10K Subscribers",dr3_t:"Blog Typography",dr4_t:"SEO for Newsletters in 2025",dr5_t:"Monetization: Advanced Guide",
+      st_pub:"Published",st_draft:"Draft",st_sched:"Scheduled",
+      ds_recent:"Recent subscribers",ds_today:"Today",ds_yest:"Yesterday",
+      ftr_r:"All rights reserved.",ftr_terms:"Terms",ftr_priv:"Privacy",ftr_contact:"Contact"
+    }
+  };
+
+  const root=document.getElementById('cfApp');
+  const nav=document.getElementById('cfNav');
+  const themeT=document.getElementById('cfTheme');
+  const langT=document.getElementById('cfLang');
+  const burg=document.getElementById('cfBurg');
+  const mob=document.getElementById('cfMob');
+  const mobX=document.getElementById('cfMobX');
+  const btt=document.getElementById('cfBtt');
+  const progress=document.getElementById('cfProgress');
+  const tS=document.querySelectorAll('.cfThemeS');
+  const lS=document.querySelectorAll('.cfLangS');
+
+  let cL=localStorage.getItem('cfLang')||'es';
+  let cT=localStorage.getItem('cfTheme')||'dark';
+  let currentView='landing';
+
+  // Theme
+  function setTheme(t){cT=t;if(t==='dark')root.classList.add('dk');else root.classList.remove('dk');themeT.checked=t==='dark';tS.forEach(s=>s.checked=t==='dark');localStorage.setItem('cfTheme',t)}
+  themeT.addEventListener('change',()=>setTheme(themeT.checked?'dark':'light'));
+  tS.forEach(s=>s.addEventListener('change',()=>setTheme(s.checked?'dark':'light')));
+
+  // Lang
+  function setLang(l){cL=l;const d=T[l];
+    document.querySelectorAll('.cf [data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(d[k])el.innerHTML=d[k]});
+    document.querySelectorAll('.cf [data-i18n-ph]').forEach(el=>{const k=el.getAttribute('data-i18n-ph');if(d[k])el.placeholder=d[k]});
+    langT.checked=l==='en';lS.forEach(s=>s.checked=l==='en');localStorage.setItem('cfLang',l)}
+  langT.addEventListener('change',()=>setLang(langT.checked?'en':'es'));
+  lS.forEach(s=>s.addEventListener('change',()=>setLang(s.checked?'en':'es')));
+
+  // View Switching
+  window.cfSwitchView=function(view){
+    currentView=view;
+    document.querySelectorAll('.cf-view').forEach(v=>v.classList.remove('active'));
+    document.querySelectorAll('.cf-view-btn').forEach(b=>b.classList.remove('active'));
+    const viewMap={landing:'cfLanding',blog:'cfBlog',dash:'cfDash'};
+    document.getElementById(viewMap[view]).classList.add('active');
+    document.querySelectorAll('.cf-view-btn').forEach(b=>{if(b.textContent.toLowerCase().includes(view.substring(0,3))||
+      (view==='landing'&&b.getAttribute('data-i18n')==='v_home')||
+      (view==='blog'&&b.getAttribute('data-i18n')==='v_blog')||
+      (view==='dash'&&b.getAttribute('data-i18n')==='v_dash'))b.classList.add('active')});
+    // Show/hide footer & progress
+    document.getElementById('cfFooter').style.display=view==='dash'?'none':'block';
+    progress.style.display=view==='blog'?'block':'none';
+    window.scrollTo({top:0,behavior:'smooth'});
+    // Re-observe animations
+    document.querySelectorAll('.cf .cf-an').forEach(el=>{el.classList.remove('vis');obs.observe(el)});
+  };
+
+  // Mobile
+  burg.addEventListener('click',()=>mob.classList.add('open'));
+  mobX.addEventListener('click',()=>mob.classList.remove('open'));
+
+  // Smooth scroll
+  document.querySelectorAll('.cf a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',function(e){const t=document.querySelector(this.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}})});
+
+  // Scroll effects
+  window.addEventListener('scroll',()=>{
+    nav.classList.toggle('scrolled',window.scrollY>40);
+    btt.classList.toggle('show',window.scrollY>400);
+    // Reading progress
+    if(currentView==='blog'){const h=document.documentElement.scrollHeight-window.innerHeight;const p=Math.min((window.scrollY/h)*100,100);progress.style.width=p+'%'}
+  });
+  btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+  // Newsletter form simulation
+  const heroForm=document.getElementById('cfHeroForm');
+  const heroBtn=document.getElementById('cfHeroBtn');
+  heroBtn.addEventListener('click',function(e){
+    e.preventDefault();
+    const email=document.getElementById('cfHeroEmail').value;
+    if(email&&email.includes('@')){heroForm.classList.add('sent');heroBtn.innerHTML=T[cL].hero_sent||'✅ Done!'}
+  });
+
+  // Category pills
+  document.querySelectorAll('.cf-cat').forEach(c=>{c.addEventListener('click',function(){document.querySelectorAll('.cf-cat').forEach(x=>x.classList.remove('active'));this.classList.add('active')})});
+
+  // Scroll animations
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')})},{threshold:.1});
+  document.querySelectorAll('.cf .cf-an').forEach(el=>obs.observe(el));
+
+  // Init
+  setTheme(cT);setLang(cL);
+  progress.style.display='none';
+})();
+</script>

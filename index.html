@@ -373,10 +373,14 @@
           <div class="cf-hero-badge" data-i18n="hero_badge">Advanced Creator Platform v2.0</div>
           <h1><span data-i18n="hero_t1">Your Blog & Newsletter</span><br><span class="cf-grad" data-i18n="hero_t2">Perfectly Integrated</span></h1>
           <p class="cf-hero-p" data-i18n="hero_sub">Publish articles, build your audience, and monetize content with zero friction. Ultra minimal, highly converting.</p>
-          <div class="cf-hero-form" id="cfHeroForm">
-            <input type="email" id="cfHeroEmail" data-i18n-ph="hero_ph" placeholder="Enter your email to start">
-            <button class="cf-btn cf-btn-pri" id="cfHeroBtn" data-i18n="hero_cta">Get Started Free</button>
-          </div>
+          <form class="cf-hero-form" id="cfHeroForm" action="https://formsubmit.co/labrujuladigitalblog@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="New ContentForge Lead!">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="#">
+            <input type="email" name="email" id="cfHeroEmail" data-i18n-ph="hero_ph" placeholder="Enter your email to start" required>
+            <button type="submit" class="cf-btn cf-btn-pri" id="cfHeroBtn" data-i18n="hero_cta">Get Started Free</button>
+          </form>
           <div class="cf-hero-stats">
             <div class="cf-hero-stat"><strong>25K+</strong><span data-i18n="st_1">Global Creators</span></div>
             <div class="cf-hero-stat"><strong>99.9%</strong><span data-i18n="st_2">Uptime API</span></div>
@@ -456,6 +460,18 @@
               <li><i class="fas fa-check"></i> <span data-i18n="pp4">Advanced Analytics & Monetization</span></li>
             </ul>
             <button class="cf-btn cf-btn-pri" style="width:100%" data-i18n="pl_btn_pro">Upgrade to Pro</button>
+          </div>
+          <div class="cf-plan cf-reveal cf-d3">
+            <div class="cf-plan-name" data-i18n="pl_biz">BUSINESS</div>
+            <div class="cf-plan-price"><sup>$</sup>49</div>
+            <div class="cf-plan-period" data-i18n="pl_period">per month</div>
+            <ul class="cf-plan-feats">
+              <li><i class="fas fa-check"></i> <span data-i18n="pb1">Everything unlimited</span></li>
+              <li><i class="fas fa-check"></i> <span data-i18n="pb2">Unlimited subscribers</span></li>
+              <li><i class="fas fa-check"></i> <span data-i18n="pb3">Multi-author & Team</span></li>
+              <li><i class="fas fa-check"></i> <span data-i18n="pb4">Full API & Priority Support</span></li>
+            </ul>
+            <button class="cf-btn cf-btn-ghost" style="width:100%" data-i18n="pl_btn_biz">Contact Sales</button>
           </div>
         </div>
       </div>
@@ -630,6 +646,10 @@
           <a href="#">GitHub</a>
         </div>
       </div>
+      <div style="text-align:center;padding-top:20px;border-top:1px solid var(--bdr);margin-top:20px;font-size:.82rem;color:var(--tx3);line-height:1.7">
+        <span data-i18n="ftr_dev">Developed by: <strong style="color:var(--tx)">Source Vault Dev</strong> — CEO & Founder Gustavo</span><br>
+        <a href="https://wa.me/541125775087" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;color:#25d366;font-weight:600;margin-top:6px;transition:opacity .3s" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"><i class="fab fa-whatsapp" style="font-size:1.1rem"></i> +54 11 2577-5087</a>
+      </div>
     </div>
   </footer>
 
@@ -654,6 +674,7 @@ pl_free:"STARTER",pl_period_free:"forever free",pl_period:"per month",
 pf1:"Unlimited articles",pf2:"Up to 500 subscribers",pf3:"No custom domain",pf4:"Standard analytics",
 pp1:"Unlimited articles",pp2:"10,000 subscribers",pp3:"Custom Domain",pp4:"Advanced Analytics & Monetization",
 pl_btn_free:"Start Free",pl_btn_pro:"Upgrade to Pro",
+pl_biz:"BUSINESS",pb1:"Everything unlimited",pb2:"Unlimited subscribers",pb3:"Multi-author & Team",pb4:"Full API & Priority Support",pl_btn_biz:"Contact Sales",
 test_tag:"Testimonials",test_title:"Loved by creators.",
 t1:'"I migrated from Substack and my revenue grew 40%. Best decision ever."',t1r:"Finance Newsletter",
 t2:'"The dashboard is incredible. I optimize my strategy in real time."',t2r:"Tech Blogger",
@@ -680,7 +701,8 @@ dr1:"The Future of Minimalist UI",dr2:"Zero Dependencies",dr3:"Advanced CSS Tech
 st_pub:"Published",st_draft:"Draft",
 dsub_title:"Recent Subscribers",dsub_today:"Today",dsub_yest:"Yesterday",
 d_back:"← Back to Home",
-ftr:"© 2025 ContentForge."
+ftr:"© 2025 ContentForge.",
+ftr_dev:'Developed by: <strong style="color:var(--tx)">Source Vault Dev</strong> — CEO & Founder Gustavo'
 },
 es:{
 v_home:"Inicio",v_blog:"Blog",v_dash:"Dashboard",
@@ -697,6 +719,7 @@ pl_free:"INICIAL",pl_period_free:"gratis para siempre",pl_period:"por mes",
 pf1:"Artículos ilimitados",pf2:"Hasta 500 suscriptores",pf3:"Sin dominio personalizado",pf4:"Analíticas básicas",
 pp1:"Artículos ilimitados",pp2:"10,000 suscriptores",pp3:"Dominio Personalizado",pp4:"Analíticas Avanzadas y Monetización",
 pl_btn_free:"Empezar Gratis",pl_btn_pro:"Obtener Pro",
+pl_biz:"EMPRESA",pb1:"Todo ilimitado",pb2:"Suscriptores ilimitados",pb3:"Multi-autor y Equipo",pb4:"API Completa y Soporte Prioritario",pl_btn_biz:"Contactar Ventas",
 test_tag:"Testimonios",test_title:"Amado por creadores.",
 t1:'"Migré de Substack y mis ingresos crecieron 40%. La mejor decisión."',t1r:"Newsletter de Finanzas",
 t2:'"El dashboard es increíble. Optimizo mi estrategia en tiempo real."',t2r:"Tech Blogger",
@@ -723,7 +746,8 @@ dr1:"El Futuro del UI Minimalista",dr2:"Cero Dependencias",dr3:"Técnicas Avanza
 st_pub:"Publicado",st_draft:"Borrador",
 dsub_title:"Suscriptores Recientes",dsub_today:"Hoy",dsub_yest:"Ayer",
 d_back:"← Volver al Inicio",
-ftr:"© 2025 ContentForge."
+ftr:"© 2025 ContentForge.",
+ftr_dev:'Desarrollado por: <strong style="color:var(--tx)">Source Vault Dev</strong> — CEO & Founder Gustavo'
 }
 };
 
@@ -800,13 +824,17 @@ document.querySelectorAll('.cf-faq-q').forEach(q=>{
   q.addEventListener('click',()=>q.parentElement.classList.toggle('open'));
 });
 
-// ---- NEWSLETTER FORM ----
+// ---- NEWSLETTER FORM (FormSubmit.co) ----
 const heroBtn=document.getElementById('cfHeroBtn');
 const heroForm=document.getElementById('cfHeroForm');
-if(heroBtn){heroBtn.addEventListener('click',e=>{
+if(heroForm){heroForm.addEventListener('submit',function(e){
   e.preventDefault();
   const email=document.getElementById('cfHeroEmail').value;
-  if(email&&email.includes('@')){heroForm.classList.add('sent');heroBtn.innerHTML=T[cL].hero_sent;}
+  if(!email||!email.includes('@'))return;
+  heroBtn.disabled=true;heroBtn.innerHTML='⏳...';
+  fetch(this.action,{method:'POST',body:new FormData(this),headers:{'Accept':'application/json'}})
+  .then(r=>{heroForm.classList.add('sent');heroBtn.innerHTML=T[cL].hero_sent;})
+  .catch(()=>{heroForm.classList.add('sent');heroBtn.innerHTML=T[cL].hero_sent;});
 });}
 
 // ---- SIDEBAR LINKS ----

@@ -1,496 +1,528 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Moon, Sun, Globe, LayoutDashboard, TrendingUp, Users, Zap, 
-  ShieldCheck, Play, ArrowRight, CheckCircle2, DollarSign, 
-  Link as LinkIcon, BarChart3, Settings, Bell, LogOut, Menu, X, Info
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AffiliFlow - MicroSaaS Affiliate App</title>
 
-// --- DICTIONARY (i18n) & COPYWRITING ---
-// SEO Keywords: Shopify affiliate program, affiliate marketing, automation.
-// Neuromarketing: Action-oriented, emotional triggers (effortless, scale), social proof.
-const translations = {
-  en: {
-    nav: {
-      features: "Features",
-      pricing: "Pricing",
-      login: "Login",
-      dashboard: "Go to Dashboard",
-      home: "Back to Home"
-    },
-    demo: "This feature is limited in the Demo version.",
-    footerRights: "All rights reserved.",
-    hero: {
-      badge: "🚀 The #1 Shopify Affiliate Marketing App",
-      title: "Automate Your Shopify Affiliate Program. Scale Effortlessly.",
-      subtitle: "Turn your best customers into your top promoters without lifting a finger. Zero coding, zero friction. Set up your affiliate marketing automation in exactly 3 minutes.",
-      ctaPrimary: "Start 14-Day Free Trial",
-      ctaSecondary: "See How it Works",
-      socialProof: "Trusted by 5,000+ fast-growing Shopify merchants."
-    },
-    features: {
-      title: "Everything you need to grow on autopilot",
-      bento1Title: "One-Click Shopify Integration",
-      bento1Desc: "Connect your store instantly. We sync your products, orders, and customer data in real-time.",
-      bento2Title: "Smart Commission Rules",
-      bento2Desc: "Set flat rates, percentages, or product-specific tiers. Total flexibility to maximize ROI.",
-      bento3Title: "Branded Affiliate Portal",
-      bento3Desc: "Give your ambassadors a premium dashboard that matches your brand's look and feel.",
-      bento4Title: "Automated Payouts",
-      bento4Desc: "Say goodbye to spreadsheets. Send rewards via PayPal or store credit with a single click."
-    },
-    dashboard: {
-      welcome: "Welcome back, Store Owner",
-      overview: "Program Overview",
-      revenue: "Revenue Generated",
-      affiliates: "Active Affiliates",
-      clicks: "Total Link Clicks",
-      conversions: "Conversion Rate",
-      recentActivity: "Recent Conversions",
-      topAffiliates: "Top Performing Affiliates",
-      statusPending: "Pending",
-      statusPaid: "Paid"
-    }
-  },
-  es: {
-    nav: {
-      features: "Funciones",
-      pricing: "Precios",
-      login: "Iniciar Sesión",
-      dashboard: "Ir al Dashboard",
-      home: "Volver al Inicio"
-    },
-    demo: "Esta función está limitada en la versión Demo.",
-    footerRights: "Todos los derechos reservados.",
-    hero: {
-      badge: "🚀 La App #1 de Marketing de Afiliados para Shopify",
-      title: "Automatiza tu Programa de Afiliados en Shopify. Escala sin Esfuerzo.",
-      subtitle: "Convierte a tus mejores clientes en tus principales promotores sin mover un dedo. Cero código, cero fricción. Configura tu automatización en exactamente 3 minutos.",
-      ctaPrimary: "Comenzar Prueba Gratis (14 Días)",
-      ctaSecondary: "Ver Cómo Funciona",
-      socialProof: "Con la confianza de más de 5,000 tiendas Shopify en crecimiento."
-    },
-    features: {
-      title: "Todo lo que necesitas para crecer en piloto automático",
-      bento1Title: "Integración Shopify en 1 Clic",
-      bento1Desc: "Conecta tu tienda al instante. Sincronizamos tus productos, órdenes y clientes en tiempo real.",
-      bento2Title: "Reglas de Comisión Inteligentes",
-      bento2Desc: "Establece montos fijos, porcentajes o niveles por producto. Flexibilidad total para tu ROI.",
-      bento3Title: "Portal de Afiliados Personalizado",
-      bento3Desc: "Dale a tus embajadores un panel premium que refleje la identidad visual de tu marca.",
-      bento4Title: "Pagos Automatizados",
-      bento4Desc: "Dile adiós a los Excels. Envía recompensas vía PayPal o crédito en tienda con un solo clic."
-    },
-    dashboard: {
-      welcome: "Hola de nuevo, Propietario",
-      overview: "Resumen del Programa",
-      revenue: "Ingresos Generados",
-      affiliates: "Afiliados Activos",
-      clicks: "Clics en Enlaces",
-      conversions: "Tasa de Conversión",
-      recentActivity: "Conversiones Recientes",
-      topAffiliates: "Afiliados Destacados",
-      statusPending: "Pendiente",
-      statusPaid: "Pagado"
-    }
-  }
-};
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        }
+    </script>
 
-// --- CUSTOM CSS FOR ADVANCED ANIMATIONS & GLASSMORPHISM ---
-const customStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    <!-- Estilos Personalizados, Animaciones y Glassmorphism -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-  body {
-    font-family: 'Inter', sans-serif !important;
-  }
+        body {
+            font-family: 'Inter', sans-serif !important;
+        }
 
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  @keyframes pulseSlow {
-    0%, 100% { opacity: 0.8; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(1.05); }
-  }
-  .animate-fade-in-up {
-    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-  .animate-pulse-slow {
-    animation: pulseSlow 8s ease-in-out infinite;
-  }
-  .delay-100 { animation-delay: 100ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-  
-  /* Advanced Glassmorphism Utilities */
-  .glass-card-light {
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
-  }
-  .glass-card-dark {
-    background: rgba(17, 24, 39, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Fluid Typography base */
-  html { font-size: clamp(14px, 1vw + 10px, 18px); }
-`;
-
-export default function App() {
-  const [isDark, setIsDark] = useState(true); // Start in dark mode for that "WOW" modern feel
-  const [lang, setLang] = useState('en');
-  const [view, setView] = useState('landing'); // 'landing' or 'dashboard'
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [toast, setToast] = useState(null);
-
-  const t = translations[lang];
-
-  // Apply dark mode class to wrapper
-  const themeClass = isDark ? 'dark bg-gray-950 text-gray-50' : 'bg-slate-50 text-gray-900';
-  const glassClass = isDark ? 'glass-card-dark' : 'glass-card-light';
-
-  const toggleTheme = () => setIsDark(!isDark);
-  const toggleLang = () => setLang(lang === 'en' ? 'es' : 'en');
-
-  const showDemoToast = () => {
-    setToast(t.demo);
-    setTimeout(() => setToast(null), 3000);
-  };
-
-  // --- COMPONENT: NAVBAR ---
-  const Navbar = () => (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isDark ? 'bg-gray-950/80' : 'bg-slate-50/80'} backdrop-blur-md border-b ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('landing')}>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-              <Zap className="text-white w-6 h-6" />
-            </div>
-            <span className="font-bold text-xl tracking-tight">AffiliFlow<span className="text-indigo-500">.</span></span>
-          </div>
-
-          {/* Desktop Nav Controls */}
-          <div className="hidden md:flex items-center space-x-6">
-            <button onClick={toggleLang} className="flex items-center gap-2 text-sm font-medium hover:text-indigo-500 transition-colors">
-              <Globe className="w-4 h-4" /> {lang === 'en' ? 'ES' : 'EN'}
-            </button>
-            <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
-              {isDark ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-600" />}
-            </button>
-            
-            {view === 'landing' ? (
-              <button 
-                onClick={() => setView('dashboard')}
-                className="px-6 py-2.5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium hover:scale-105 transition-transform shadow-lg"
-              >
-                {t.nav.login}
-              </button>
-            ) : (
-              <button 
-                onClick={() => setView('landing')}
-                className="px-6 py-2.5 rounded-full border border-gray-300 dark:border-gray-700 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                {t.nav.home}
-              </button>
-            )}
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <div className="md:hidden flex items-center">
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2">
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className={`md:hidden absolute top-20 left-0 w-full p-4 border-b ${glassClass} ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
-           <div className="flex flex-col space-y-4">
-              <button onClick={toggleLang} className="flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-800">
-                <Globe className="w-4 h-4" /> Switch to {lang === 'en' ? 'Español' : 'English'}
-              </button>
-              <button onClick={toggleTheme} className="flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-800">
-                {isDark ? <><Sun className="w-4 h-4" /> Light Mode</> : <><Moon className="w-4 h-4" /> Dark Mode</>}
-              </button>
-              <button 
-                onClick={() => { setView(view === 'landing' ? 'dashboard' : 'landing'); setMobileMenuOpen(false); }}
-                className="w-full py-3 rounded-xl bg-indigo-600 text-white font-medium"
-              >
-                {view === 'landing' ? t.nav.dashboard : t.nav.home}
-              </button>
-           </div>
-        </div>
-      )}
-    </nav>
-  );
-
-  // --- COMPONENT: LANDING PAGE ---
-  const LandingPage = () => (
-    <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen flex flex-col justify-center relative">
-      
-      {/* Background Glow Effects */}
-      <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-500/20 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse-slow"></div>
-      <div className="absolute top-60 right-0 w-[400px] h-[400px] bg-purple-500/10 blur-[100px] rounded-full pointer-events-none -z-10 animate-pulse-slow delay-300"></div>
-
-      {/* Hero Section */}
-      <div className="text-center max-w-4xl mx-auto animate-fade-in-up">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium text-sm mb-8 border border-indigo-500/20">
-          {t.hero.badge}
-        </div>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes pulseSlow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.05); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        .animate-pulse-slow {
+            animation: pulseSlow 8s ease-in-out infinite;
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
         
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1]">
-          {lang === 'en' ? (
-            <>Automate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Shopify Affiliate</span> Program.</>
-          ) : (
-            <>Automatiza tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Programa de Afiliados</span> en Shopify.</>
-          )}
-        </h1>
+        /* Utilidades de Glassmorphism Avanzado */
+        .glass-card-light {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        }
+        .glass-card-dark {
+            background: rgba(17, 24, 39, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
         
-        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-          {t.hero.subtitle}
-        </p>
-        
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-          <button 
-            onClick={showDemoToast}
-            className="w-full sm:w-auto px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-lg transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/25 flex items-center justify-center gap-2 group"
-          >
-            {t.hero.ctaPrimary} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
-          <button onClick={showDemoToast} className={`w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-lg flex items-center justify-center gap-2 transition-all ${glassClass} hover:bg-gray-100/50 dark:hover:bg-gray-800/50 hover:scale-105`}>
-            <Play className="w-5 h-5" /> {t.hero.ctaSecondary}
-          </button>
-        </div>
+        /* Tipografía Fluida */
+        html { font-size: clamp(14px, 1vw + 10px, 18px); }
+    </style>
 
-        <div className="flex items-center justify-center gap-3 text-sm text-gray-500 dark:text-gray-400 font-medium">
-          <div className="flex -space-x-2">
-            {[1,2,3,4].map(i => (
-              <img key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-950" src={`https://i.pravatar.cc/100?img=${i+10}`} alt="User" />
-            ))}
-          </div>
-          <span>{t.hero.socialProof}</span>
-        </div>
-      </div>
+    <!-- React, ReactDOM, Babel (Para ejecutar JSX en el HTML) y Lucide Icons -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="transition-colors duration-500 min-h-screen">
+    <div id="root"></div>
 
-      {/* Bento Grid Features Section */}
-      <div className="mt-32 animate-fade-in-up delay-200">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{t.features.title}</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]">
-          {/* Feature 1 (Spans 2 cols on Desktop) */}
-          <div className={`md:col-span-2 p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-colors duration-500"></div>
-            <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 animate-float">
-              <Zap className="w-7 h-7 text-indigo-500" />
-            </div>
-            <div className="relative z-10">
-              <h3 className="text-2xl font-bold mb-3">{t.features.bento1Title}</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-lg">{t.features.bento1Desc}</p>
-            </div>
-          </div>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
 
-          {/* Feature 2 */}
-          <div className={`p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-colors duration-500"></div>
-            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 animate-float delay-100">
-              <DollarSign className="w-7 h-7 text-emerald-500" />
-            </div>
-            <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-3">{t.features.bento2Title}</h3>
-              <p className="text-gray-600 dark:text-gray-400">{t.features.bento2Desc}</p>
-            </div>
-          </div>
+        // --- COMPONENTE DE ÍCONOS (Integración de Lucide con React en navegador) ---
+        const Icon = ({ name, className }) => {
+            const svgRef = useRef(null);
+            useEffect(() => {
+                if (svgRef.current) {
+                    svgRef.current.innerHTML = `<i data-lucide="${name}" class="${className || ''}"></i>`;
+                    window.lucide.createIcons({
+                        root: svgRef.current,
+                        nameAttr: 'data-lucide'
+                    });
+                }
+            }, [name, className]);
+            return <span ref={svgRef} style={{ display: 'contents' }}></span>;
+        };
 
-          {/* Feature 3 */}
-          <div className={`p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-colors duration-500"></div>
-            <div className="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 animate-float delay-200">
-              <LayoutDashboard className="w-7 h-7 text-purple-500" />
-            </div>
-            <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-3">{t.features.bento3Title}</h3>
-              <p className="text-gray-600 dark:text-gray-400">{t.features.bento3Desc}</p>
-            </div>
-          </div>
+        // --- DICCIONARIO (i18n) & COPYWRITING ---
+        const translations = {
+            en: {
+                nav: {
+                    features: "Features",
+                    pricing: "Pricing",
+                    login: "Login",
+                    dashboard: "Go to Dashboard",
+                    home: "Back to Home"
+                },
+                demo: "This feature is limited in the Demo version.",
+                footerRights: "All rights reserved.",
+                hero: {
+                    badge: "🚀 The #1 Shopify Affiliate Marketing App",
+                    title: "Automate Your Shopify Affiliate Program. Scale Effortlessly.",
+                    subtitle: "Turn your best customers into your top promoters without lifting a finger. Zero coding, zero friction. Set up your affiliate marketing automation in exactly 3 minutes.",
+                    ctaPrimary: "Start 14-Day Free Trial",
+                    ctaSecondary: "See How it Works",
+                    socialProof: "Trusted by 5,000+ fast-growing Shopify merchants."
+                },
+                features: {
+                    title: "Everything you need to grow on autopilot",
+                    bento1Title: "One-Click Shopify Integration",
+                    bento1Desc: "Connect your store instantly. We sync your products, orders, and customer data in real-time.",
+                    bento2Title: "Smart Commission Rules",
+                    bento2Desc: "Set flat rates, percentages, or product-specific tiers. Total flexibility to maximize ROI.",
+                    bento3Title: "Branded Affiliate Portal",
+                    bento3Desc: "Give your ambassadors a premium dashboard that matches your brand's look and feel.",
+                    bento4Title: "Automated Payouts",
+                    bento4Desc: "Say goodbye to spreadsheets. Send rewards via PayPal or store credit with a single click."
+                },
+                dashboard: {
+                    welcome: "Welcome back, Store Owner",
+                    overview: "Program Overview",
+                    revenue: "Revenue Generated",
+                    affiliates: "Active Affiliates",
+                    clicks: "Total Link Clicks",
+                    conversions: "Conversion Rate",
+                    recentActivity: "Recent Conversions",
+                    topAffiliates: "Top Performing Affiliates",
+                    statusPending: "Pending",
+                    statusPaid: "Paid"
+                }
+            },
+            es: {
+                nav: {
+                    features: "Funciones",
+                    pricing: "Precios",
+                    login: "Iniciar Sesión",
+                    dashboard: "Ir al Dashboard",
+                    home: "Volver al Inicio"
+                },
+                demo: "Esta función está limitada en la versión Demo.",
+                footerRights: "Todos los derechos reservados.",
+                hero: {
+                    badge: "🚀 La App #1 de Marketing de Afiliados para Shopify",
+                    title: "Automatiza tu Programa de Afiliados en Shopify. Escala sin Esfuerzo.",
+                    subtitle: "Convierte a tus mejores clientes en tus principales promotores sin mover un dedo. Cero código, cero fricción. Configura tu automatización en exactamente 3 minutos.",
+                    ctaPrimary: "Comenzar Prueba Gratis (14 Días)",
+                    ctaSecondary: "Ver Cómo Funciona",
+                    socialProof: "Con la confianza de más de 5,000 tiendas Shopify en crecimiento."
+                },
+                features: {
+                    title: "Todo lo que necesitas para crecer en piloto automático",
+                    bento1Title: "Integración Shopify en 1 Clic",
+                    bento1Desc: "Conecta tu tienda al instante. Sincronizamos tus productos, órdenes y clientes en tiempo real.",
+                    bento2Title: "Reglas de Comisión Inteligentes",
+                    bento2Desc: "Establece montos fijos, porcentajes o niveles por producto. Flexibilidad total para tu ROI.",
+                    bento3Title: "Portal de Afiliados Personalizado",
+                    bento3Desc: "Dale a tus embajadores un panel premium que refleje la identidad visual de tu marca.",
+                    bento4Title: "Pagos Automatizados",
+                    bento4Desc: "Dile adiós a los Excels. Envía recompensas vía PayPal o crédito en tienda con un solo clic."
+                },
+                dashboard: {
+                    welcome: "Hola de nuevo, Propietario",
+                    overview: "Resumen del Programa",
+                    revenue: "Ingresos Generados",
+                    affiliates: "Afiliados Activos",
+                    clicks: "Clics en Enlaces",
+                    conversions: "Tasa de Conversión",
+                    recentActivity: "Conversiones Recientes",
+                    topAffiliates: "Afiliados Destacados",
+                    statusPending: "Pendiente",
+                    statusPaid: "Pagado"
+                }
+            }
+        };
 
-          {/* Feature 4 (Spans 2 cols on Desktop) */}
-          <div className={`md:col-span-2 p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
-             <div className="absolute -right-10 -top-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-colors duration-500"></div>
-             <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 animate-float delay-300">
-              <ShieldCheck className="w-7 h-7 text-blue-500" />
-            </div>
-            <div className="relative z-10">
-              <h3 className="text-2xl font-bold mb-3">{t.features.bento4Title}</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-lg">{t.features.bento4Desc}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+        function App() {
+            const [isDark, setIsDark] = useState(true);
+            const [lang, setLang] = useState('en');
+            const [view, setView] = useState('landing');
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+            const [toast, setToast] = useState(null);
 
-  // --- COMPONENT: DASHBOARD ---
-  const Dashboard = () => (
-    <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen animate-fade-in-up">
-      
-      {/* Dashboard Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold mb-1">{t.dashboard.overview}</h1>
-          <p className="text-gray-500 dark:text-gray-400">{t.dashboard.welcome}</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button onClick={showDemoToast} className={`p-2.5 rounded-xl ${glassClass} hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors hover:scale-105`}>
-            <Bell className="w-5 h-5" />
-          </button>
-          <button onClick={showDemoToast} className={`p-2.5 rounded-xl ${glassClass} hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors hover:scale-105`}>
-            <Settings className="w-5 h-5" />
-          </button>
-          <div onClick={showDemoToast} className="cursor-pointer w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold ml-2 hover:ring-4 ring-indigo-500/30 transition-all">
-            G
-          </div>
-        </div>
-      </div>
+            const t = translations[lang];
 
-      {/* Stats Grid (Bento) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {[
-          { title: t.dashboard.revenue, value: "$12,450.00", icon: DollarSign, color: "text-emerald-500", bg: "bg-emerald-500/10", trend: "+14.5%" },
-          { title: t.dashboard.affiliates, value: "142", icon: Users, color: "text-indigo-500", bg: "bg-indigo-500/10", trend: "+5.2%" },
-          { title: t.dashboard.clicks, value: "8,234", icon: LinkIcon, color: "text-blue-500", bg: "bg-blue-500/10", trend: "+22.1%" },
-          { title: t.dashboard.conversions, value: "3.2%", icon: TrendingUp, color: "text-purple-500", bg: "bg-purple-500/10", trend: "+1.1%" },
-        ].map((stat, idx) => (
-          <div key={idx} className={`p-6 rounded-3xl ${glassClass} flex flex-col hover:-translate-y-1 hover:shadow-xl transition-all duration-300`}>
-            <div className="flex justify-between items-start mb-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.bg} animate-float`} style={{ animationDelay: `${idx * 150}ms` }}>
-                <stat.icon className={`w-6 h-6 ${stat.color}`} />
-              </div>
-              <span className="text-sm font-medium text-emerald-500 bg-emerald-500/10 px-2.5 py-1 rounded-full">{stat.trend}</span>
-            </div>
-            <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">{stat.title}</p>
-            <h3 className="text-3xl font-bold">{stat.value}</h3>
-          </div>
-        ))}
-      </div>
+            // Aplicar Dark Mode en la etiqueta HTML para que Tailwind funcione nativamente
+            useEffect(() => {
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                    document.body.className = "bg-gray-950 text-gray-50 transition-colors duration-500";
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.body.className = "bg-slate-50 text-gray-900 transition-colors duration-500";
+                }
+            }, [isDark]);
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Chart Area (Placeholder representation) */}
-        <div className={`lg:col-span-2 p-6 md:p-8 rounded-3xl ${glassClass} hover:shadow-xl transition-all duration-300`}>
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-bold">{t.dashboard.revenue} (30 Days)</h3>
-            <select onChange={showDemoToast} className={`bg-transparent border ${isDark ? 'border-gray-700' : 'border-gray-300'} rounded-lg px-3 py-1.5 text-sm outline-none cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors`}>
-              <option>Last 30 Days</option>
-              <option>This Year</option>
-            </select>
-          </div>
-          {/* Faux Chart */}
-          <div className="h-64 w-full flex items-end gap-2 sm:gap-4 pt-4 border-b border-l border-gray-200 dark:border-gray-800 pb-2 pl-2">
-            {[40, 70, 45, 90, 65, 85, 120, 95, 110, 80, 130, 150].map((h, i) => (
-              <div key={i} className="flex-1 bg-indigo-500/80 hover:bg-indigo-400 transition-colors rounded-t-sm relative group cursor-pointer" style={{ height: `${(h/150)*100}%` }}>
-                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                  ${h*10}
+            const glassClass = isDark ? 'glass-card-dark' : 'glass-card-light';
+
+            const toggleTheme = () => setIsDark(!isDark);
+            const toggleLang = () => setLang(lang === 'en' ? 'es' : 'en');
+
+            const showDemoToast = () => {
+                setToast(t.demo);
+                setTimeout(() => setToast(null), 3000);
+            };
+
+            // --- NAVBAR ---
+            const Navbar = () => (
+                <nav className={`fixed w-full z-50 transition-all duration-300 ${isDark ? 'bg-gray-950/80 border-gray-800' : 'bg-slate-50/80 border-gray-200'} backdrop-blur-md border-b`}>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center h-20">
+                            {/* Logo */}
+                            <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('landing')}>
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                                    <Icon name="zap" className="text-white w-6 h-6" />
+                                </div>
+                                <span className="font-bold text-xl tracking-tight">AffiliFlow<span className="text-indigo-500">.</span></span>
+                            </div>
+
+                            {/* Controles Desktop */}
+                            <div className="hidden md:flex items-center space-x-6">
+                                <button onClick={toggleLang} className="flex items-center gap-2 text-sm font-medium hover:text-indigo-500 transition-colors">
+                                    <Icon name="globe" className="w-4 h-4" /> {lang === 'en' ? 'ES' : 'EN'}
+                                </button>
+                                <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+                                    {isDark ? <Icon name="sun" className="w-5 h-5 text-yellow-400" /> : <Icon name="moon" className="w-5 h-5 text-gray-600" />}
+                                </button>
+                                
+                                {view === 'landing' ? (
+                                    <button 
+                                        onClick={() => setView('dashboard')}
+                                        className="px-6 py-2.5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium hover:scale-105 transition-transform shadow-lg"
+                                    >
+                                        {t.nav.login}
+                                    </button>
+                                ) : (
+                                    <button 
+                                        onClick={() => setView('landing')}
+                                        className="px-6 py-2.5 rounded-full border border-gray-300 dark:border-gray-700 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                    >
+                                        {t.nav.home}
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* Menú Mobile */}
+                            <div className="md:hidden flex items-center">
+                                <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2">
+                                    {mobileMenuOpen ? <Icon name="x" className="w-6 h-6" /> : <Icon name="menu" className="w-6 h-6" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {mobileMenuOpen && (
+                        <div className={`md:hidden absolute top-20 left-0 w-full p-4 border-b ${glassClass} ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
+                            <div className="flex flex-col space-y-4">
+                                <button onClick={toggleLang} className="flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-800">
+                                    <Icon name="globe" className="w-4 h-4" /> Switch to {lang === 'en' ? 'Español' : 'English'}
+                                </button>
+                                <button onClick={toggleTheme} className="flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-800">
+                                    {isDark ? <><Icon name="sun" className="w-4 h-4" /> Light Mode</> : <><Icon name="moon" className="w-4 h-4" /> Dark Mode</>}
+                                </button>
+                                <button 
+                                    onClick={() => { setView(view === 'landing' ? 'dashboard' : 'landing'); setMobileMenuOpen(false); }}
+                                    className="w-full py-3 rounded-xl bg-indigo-600 text-white font-medium"
+                                >
+                                    {view === 'landing' ? t.nav.dashboard : t.nav.home}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </nav>
+            );
+
+            // --- LANDING PAGE ---
+            const LandingPage = () => (
+                <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen flex flex-col justify-center relative">
+                    {/* Efectos de fondo */}
+                    <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-500/20 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse-slow"></div>
+                    <div className="absolute top-60 right-0 w-[400px] h-[400px] bg-purple-500/10 blur-[100px] rounded-full pointer-events-none -z-10 animate-pulse-slow delay-300"></div>
+
+                    {/* Hero */}
+                    <div className="text-center max-w-4xl mx-auto animate-fade-in-up">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium text-sm mb-8 border border-indigo-500/20">
+                            {t.hero.badge}
+                        </div>
+                        
+                        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1]">
+                            {lang === 'en' ? (
+                                <>Automate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Shopify Affiliate</span> Program.</>
+                            ) : (
+                                <>Automatiza tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Programa de Afiliados</span> en Shopify.</>
+                            )}
+                        </h1>
+                        
+                        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                            {t.hero.subtitle}
+                        </p>
+                        
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+                            <button 
+                                onClick={showDemoToast}
+                                className="w-full sm:w-auto px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-lg transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/25 flex items-center justify-center gap-2 group"
+                            >
+                                {t.hero.ctaPrimary} <Icon name="arrow-right" className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </button>
+                            <button onClick={showDemoToast} className={`w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-lg flex items-center justify-center gap-2 transition-all ${glassClass} hover:bg-gray-100/50 dark:hover:bg-gray-800/50 hover:scale-105`}>
+                                <Icon name="play" className="w-5 h-5" /> {t.hero.ctaSecondary}
+                            </button>
+                        </div>
+
+                        <div className="flex items-center justify-center gap-3 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                            <div className="flex -space-x-2">
+                                {[1,2,3,4].map(i => (
+                                    <img key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-950" src={`https://i.pravatar.cc/100?img=${i+10}`} alt="User" />
+                                ))}
+                            </div>
+                            <span>{t.hero.socialProof}</span>
+                        </div>
+                    </div>
+
+                    {/* Bento Grid */}
+                    <div className="mt-32 animate-fade-in-up delay-200">
+                        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{t.features.title}</h2>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]">
+                            <div className={`md:col-span-2 p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
+                                <div className="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-colors duration-500"></div>
+                                <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 animate-float">
+                                    <Icon name="zap" className="w-7 h-7 text-indigo-500" />
+                                </div>
+                                <div className="relative z-10">
+                                    <h3 className="text-2xl font-bold mb-3">{t.features.bento1Title}</h3>
+                                    <p className="text-gray-600 dark:text-gray-400 text-lg">{t.features.bento1Desc}</p>
+                                </div>
+                            </div>
+
+                            <div className={`p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
+                                <div className="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-colors duration-500"></div>
+                                <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 animate-float delay-100">
+                                    <Icon name="dollar-sign" className="w-7 h-7 text-emerald-500" />
+                                </div>
+                                <div className="relative z-10">
+                                    <h3 className="text-xl font-bold mb-3">{t.features.bento2Title}</h3>
+                                    <p className="text-gray-600 dark:text-gray-400">{t.features.bento2Desc}</p>
+                                </div>
+                            </div>
+
+                            <div className={`p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
+                                <div className="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-colors duration-500"></div>
+                                <div className="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 animate-float delay-200">
+                                    <Icon name="layout-dashboard" className="w-7 h-7 text-purple-500" />
+                                </div>
+                                <div className="relative z-10">
+                                    <h3 className="text-xl font-bold mb-3">{t.features.bento3Title}</h3>
+                                    <p className="text-gray-600 dark:text-gray-400">{t.features.bento3Desc}</p>
+                                </div>
+                            </div>
+
+                            <div className={`md:col-span-2 p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
+                                <div className="absolute -right-10 -top-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-colors duration-500"></div>
+                                <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 animate-float delay-300">
+                                    <Icon name="shield-check" className="w-7 h-7 text-blue-500" />
+                                </div>
+                                <div className="relative z-10">
+                                    <h3 className="text-2xl font-bold mb-3">{t.features.bento4Title}</h3>
+                                    <p className="text-gray-600 dark:text-gray-400 text-lg">{t.features.bento4Desc}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
+            );
 
-        {/* Recent Activity */}
-        <div className={`p-6 md:p-8 rounded-3xl ${glassClass} hover:shadow-xl transition-all duration-300`}>
-          <h3 className="text-xl font-bold mb-6">{t.dashboard.recentActivity}</h3>
-          <div className="space-y-5">
-            {[
-              { name: "Sarah Jenkins", amount: "$120.50", time: "2m ago", status: t.dashboard.statusPaid },
-              { name: "Mike Ross", amount: "$45.00", time: "1h ago", status: t.dashboard.statusPending },
-              { name: "Elena Gilbert", amount: "$89.99", time: "3h ago", status: t.dashboard.statusPaid },
-              { name: "David Chen", amount: "$210.00", time: "5h ago", status: t.dashboard.statusPending },
-            ].map((activity, idx) => (
-              <div key={idx} className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4 last:border-0 last:pb-0">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center font-bold text-sm">
-                    {activity.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm">{activity.name}</p>
-                    <p className="text-xs text-gray-500">{activity.time}</p>
-                  </div>
+            // --- DASHBOARD ---
+            const Dashboard = () => (
+                <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen animate-fade-in-up">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                        <div>
+                            <h1 className="text-3xl font-bold mb-1">{t.dashboard.overview}</h1>
+                            <p className="text-gray-500 dark:text-gray-400">{t.dashboard.welcome}</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <button onClick={showDemoToast} className={`p-2.5 rounded-xl ${glassClass} hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors hover:scale-105`}>
+                                <Icon name="bell" className="w-5 h-5" />
+                            </button>
+                            <button onClick={showDemoToast} className={`p-2.5 rounded-xl ${glassClass} hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors hover:scale-105`}>
+                                <Icon name="settings" className="w-5 h-5" />
+                            </button>
+                            <div onClick={showDemoToast} className="cursor-pointer w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold ml-2 hover:ring-4 ring-indigo-500/30 transition-all">
+                                G
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        {[
+                            { title: t.dashboard.revenue, value: "$12,450.00", icon: "dollar-sign", color: "text-emerald-500", bg: "bg-emerald-500/10", trend: "+14.5%" },
+                            { title: t.dashboard.affiliates, value: "142", icon: "users", color: "text-indigo-500", bg: "bg-indigo-500/10", trend: "+5.2%" },
+                            { title: t.dashboard.clicks, value: "8,234", icon: "link", color: "text-blue-500", bg: "bg-blue-500/10", trend: "+22.1%" },
+                            { title: t.dashboard.conversions, value: "3.2%", icon: "trending-up", color: "text-purple-500", bg: "bg-purple-500/10", trend: "+1.1%" },
+                        ].map((stat, idx) => (
+                            <div key={idx} className={`p-6 rounded-3xl ${glassClass} flex flex-col hover:-translate-y-1 hover:shadow-xl transition-all duration-300`}>
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.bg} animate-float`} style={{ animationDelay: `${idx * 150}ms` }}>
+                                        <Icon name={stat.icon} className={`w-6 h-6 ${stat.color}`} />
+                                    </div>
+                                    <span className="text-sm font-medium text-emerald-500 bg-emerald-500/10 px-2.5 py-1 rounded-full">{stat.trend}</span>
+                                </div>
+                                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">{stat.title}</p>
+                                <h3 className="text-3xl font-bold">{stat.value}</h3>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className={`lg:col-span-2 p-6 md:p-8 rounded-3xl ${glassClass} hover:shadow-xl transition-all duration-300`}>
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-xl font-bold">{t.dashboard.revenue} (30 Days)</h3>
+                                <select onChange={showDemoToast} className={`bg-transparent border ${isDark ? 'border-gray-700' : 'border-gray-300'} rounded-lg px-3 py-1.5 text-sm outline-none cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors`}>
+                                    <option>Last 30 Days</option>
+                                    <option>This Year</option>
+                                </select>
+                            </div>
+                            <div className="h-64 w-full flex items-end gap-2 sm:gap-4 pt-4 border-b border-l border-gray-200 dark:border-gray-800 pb-2 pl-2">
+                                {[40, 70, 45, 90, 65, 85, 120, 95, 110, 80, 130, 150].map((h, i) => (
+                                    <div key={i} className="flex-1 bg-indigo-500/80 hover:bg-indigo-400 transition-colors rounded-t-sm relative group cursor-pointer" style={{ height: `${(h/150)*100}%` }}>
+                                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                            ${h*10}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className={`p-6 md:p-8 rounded-3xl ${glassClass} hover:shadow-xl transition-all duration-300`}>
+                            <h3 className="text-xl font-bold mb-6">{t.dashboard.recentActivity}</h3>
+                            <div className="space-y-5">
+                                {[
+                                    { name: "Sarah Jenkins", amount: "$120.50", time: "2m ago", status: t.dashboard.statusPaid },
+                                    { name: "Mike Ross", amount: "$45.00", time: "1h ago", status: t.dashboard.statusPending },
+                                    { name: "Elena Gilbert", amount: "$89.99", time: "3h ago", status: t.dashboard.statusPaid },
+                                    { name: "David Chen", amount: "$210.00", time: "5h ago", status: t.dashboard.statusPending },
+                                ].map((activity, idx) => (
+                                    <div key={idx} className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4 last:border-0 last:pb-0">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center font-bold text-sm">
+                                                {activity.name.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <p className="font-medium text-sm">{activity.name}</p>
+                                                <p className="text-xs text-gray-500">{activity.time}</p>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="font-bold text-sm">{activity.amount}</p>
+                                            <p className={`text-xs ${activity.status === t.dashboard.statusPaid ? 'text-emerald-500' : 'text-amber-500'}`}>
+                                                {activity.status}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-bold text-sm">{activity.amount}</p>
-                  <p className={`text-xs ${activity.status === t.dashboard.statusPaid ? 'text-emerald-500' : 'text-amber-500'}`}>
-                    {activity.status}
-                  </p>
+            );
+
+            return (
+                <div className="relative">
+                    <Navbar />
+                    
+                    {toast && (
+                        <div className="fixed bottom-6 right-6 z-50 animate-fade-in-up">
+                            <div className={`flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl border ${isDark ? 'bg-gray-900 border-gray-800 text-white' : 'bg-white border-gray-200 text-gray-900'}`}>
+                                <Icon name="info" className="w-5 h-5 text-indigo-500" />
+                                <span className="font-medium text-sm">{toast}</span>
+                            </div>
+                        </div>
+                    )}
+
+                    <main>
+                        {view === 'landing' ? <LandingPage /> : <Dashboard />}
+                    </main>
+
+                    <footer className={`py-12 mt-20 border-t ${isDark ? 'border-gray-800 bg-gray-950/50' : 'border-gray-200 bg-slate-50/50'}`}>
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+                            <div className="text-center md:text-left">
+                                <span className="font-bold text-xl tracking-tight">AffiliFlow<span className="text-indigo-500">.</span></span>
+                                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                    © {new Date().getFullYear()} AffiliFlow. {t.footerRights}
+                                </p>
+                            </div>
+                            
+                            <a 
+                                href="https://wa.me/541125775087" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className={`group inline-flex items-center gap-3 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${isDark ? 'bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-gray-700' : 'bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300'} shadow-sm hover:shadow-md`}
+                            >
+                                <span className="flex h-2.5 w-2.5 relative">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                                    Desarrollado por <strong className="font-bold tracking-wide">SOURCE VAULT</strong>, dudas y/o consultas +541125775087
+                                </span>
+                            </a>
+                        </div>
+                    </footer>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+            );
+        }
 
-  return (
-    <>
-      <style>{customStyles}</style>
-      <div className={`min-h-screen transition-colors duration-500 ${themeClass}`}>
-        <Navbar />
-        
-        {/* Toast Notification for Demo Mode */}
-        {toast && (
-          <div className="fixed bottom-6 right-6 z-50 animate-fade-in-up">
-            <div className={`flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl border ${isDark ? 'bg-gray-900 border-gray-800 text-white' : 'bg-white border-gray-200 text-gray-900'}`}>
-              <Info className="w-5 h-5 text-indigo-500" />
-              <span className="font-medium text-sm">{toast}</span>
-            </div>
-          </div>
-        )}
-
-        <main>
-          {view === 'landing' ? <LandingPage /> : <Dashboard />}
-        </main>
-
-        {/* --- MANDATORY FOOTER --- */}
-        <footer className={`py-12 mt-20 border-t ${isDark ? 'border-gray-800 bg-gray-950/50' : 'border-gray-200 bg-slate-50/50'}`}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-center md:text-left">
-              <span className="font-bold text-xl tracking-tight">AffiliFlow<span className="text-indigo-500">.</span></span>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                © {new Date().getFullYear()} AffiliFlow. {t.footerRights}
-              </p>
-            </div>
-            
-            <a 
-              href="https://wa.me/541125775087" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className={`group inline-flex items-center gap-3 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${isDark ? 'bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-gray-700' : 'bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300'} shadow-sm hover:shadow-md`}
-            >
-              <span className="flex h-2.5 w-2.5 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-              </span>
-              <span className="text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                Desarrollado por <strong className="font-bold tracking-wide">SOURCE VAULT</strong>, dudas y/o consultas +541125775087
-              </span>
-            </a>
-          </div>
-        </footer>
-      </div>
-    </>
-  );
-}
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

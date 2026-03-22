@@ -1,859 +1,351 @@
-<!-- ================================================= -->
-<!-- CONTENTFORGE | Ultra Modern Minimalist Edition     -->
-<!-- ================================================= -->
+import React, { useState, useEffect } from 'react';
+import { 
+  Moon, Sun, Globe, LayoutDashboard, TrendingUp, Users, Zap, 
+  ShieldCheck, Play, ArrowRight, CheckCircle2, DollarSign, 
+  Link as LinkIcon, BarChart3, Settings, Bell, LogOut, Menu, X, Info
+} from 'lucide-react';
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<style>
-/* --- Odoo Override --- */
-#wrapwrap .cf,.cf{width:100vw!important;max-width:100vw!important;margin-left:calc(-50vw + 50%)!important;padding:0!important;overflow-x:hidden!important}
-
-/* --- Variables Light --- */
-.cf{
-  --bg:#ffffff; --bg2:#fafafa; --bg3:#f4f4f5;
-  --sf:rgba(255, 255, 255, 0.7); /* Glassmorphism surface */
-  --tx:#09090b; --tx2:#3f3f46; --tx3:#71717a; --tx4:#a1a1aa;
-  --pri:#000000; --pri-h:#27272a; --pri-g:rgba(0,0,0,.04);
-  --acc:#3b82f6; --acc-h:#2563eb; --acc-g:rgba(59,130,246,.1);
-  --gold:#fbbf24; --gold-h:#f59e0b;
-  --green:#10b981; --red:#ef4444;
-  --bdr:rgba(0,0,0,.08);
-  --sh:0 4px 20px rgba(0,0,0,.03); --sh-hover:0 12px 30px rgba(0,0,0,.08);
-  --nav-bg:rgba(255,255,255,.75);
-  --hero-g:radial-gradient(circle at top right, rgba(59,130,246,0.1), transparent 50%), radial-gradient(circle at bottom left, rgba(251,191,36,0.08), transparent 50%);
-  --r:20px; --rs:12px; --ease:0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* --- Dark --- */
-.cf.dk{
-  --bg:#09090b; --bg2:#121214; --bg3:#18181b;
-  --sf:rgba(24, 24, 27, 0.6);
-  --tx:#fafafa; --tx2:#d4d4d8; --tx3:#a1a1aa; --tx4:#52525b;
-  --pri:#ffffff; --pri-h:#f4f4f5; --pri-g:rgba(255,255,255,.08);
-  --bdr:rgba(255,255,255,.08);
-  --sh:0 4px 20px rgba(0,0,0,.3); --sh-hover:0 12px 30px rgba(255,255,255,.04);
-  --nav-bg:rgba(9, 9, 11, .75);
-  --hero-g:radial-gradient(circle at top right, rgba(59,130,246,0.15), transparent 50%), radial-gradient(circle at bottom left, rgba(236,72,153,0.08), transparent 50%);
-}
-
-/* --- Reset & Base --- */
-.cf *,.cf *::before,.cf *::after{margin:0;padding:0;box-sizing:border-box}
-.cf{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--tx);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased;transition:background var(--ease),color var(--ease)}
-.cf h1,.cf h2,.cf h3,.cf h4,.cf h5{font-weight:700;line-height:1.2;letter-spacing:-0.03em}
-.cf a{text-decoration:none;color:inherit}.cf ul{list-style:none}.cf section{scroll-margin-top:80px}
-.cf-w{max-width:1200px;margin:0 auto;padding:0 32px}
-.cf-wn{max-width:760px;margin:0 auto;padding:0 24px}
-.cf-blur-bg{position:absolute;inset:0;background:var(--hero-g);z-index:0;pointer-events:none}
-
-/* =============================================
-   NAV
-   ============================================= */
-.cf-nav{position:fixed;top:0;left:0;width:100%;z-index:99990;background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid transparent;transition:all var(--ease)}
-.cf-nav.scrolled{border-bottom-color:var(--bdr);box-shadow:var(--sh)}
-.cf-nav-in{display:flex;align-items:center;justify-content:space-between;height:70px;max-width:1200px;margin:0 auto;padding:0 32px}
-
-.cf-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;letter-spacing:-.03em;cursor:pointer}
-.cf-logo-i{width:32px;height:32px;background:var(--tx);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--bg);font-size:.9rem;transition:var(--ease)}
-.cf-logo:hover .cf-logo-i{transform:rotate(-10deg) scale(1.05)}
-
-.cf-nav-r{display:flex;align-items:center;gap:16px}
-.cf-views{display:flex;gap:4px;background:var(--bg3);border-radius:50px;padding:4px}
-.cf-view-btn{padding:8px 18px;border-radius:50px;font-size:.8rem;font-weight:600;border:none;background:none;color:var(--tx3);cursor:pointer;transition:var(--ease);font-family:'Plus Jakarta Sans',sans-serif}
-.cf-view-btn.active{background:var(--bg);color:var(--tx);box-shadow:var(--sh)}
-.cf-view-btn:hover:not(.active){color:var(--tx)}
-
-.cf-tog{display:flex;align-items:center;gap:6px;font-size:.7rem;font-weight:600;color:var(--tx4);user-select:none}
-.cf-sw{position:relative;width:40px;height:22px;flex-shrink:0}
-.cf-sw input{opacity:0;width:0;height:0;position:absolute}
-.cf-sli{position:absolute;inset:0;background:var(--bdr);border-radius:22px;cursor:pointer;transition:var(--ease)}
-.cf-sli::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:var(--tx);border-radius:50%;transition:var(--ease)}
-.cf-sw input:checked+.cf-sli{background:var(--pri)}
-.cf-sw input:checked+.cf-sli::before{transform:translateX(18px);background:var(--bg)}
-.cf-sep{width:1px;height:20px;background:var(--bdr);margin:0 4px}
-
-.cf-burg{display:none;background:none;border:none;font-size:1.4rem;color:var(--tx);cursor:pointer}
-
-/* Mobile */
-.cf-mob{display:none;position:fixed;inset:0;z-index:99991;background:var(--nav-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);flex-direction:column;align-items:center;justify-content:center;gap:24px;opacity:0;transition:opacity 0.4s ease}
-.cf-mob.open{display:flex;opacity:1}
-.cf-mob a{font-size:1.4rem;font-weight:600;cursor:pointer}
-.cf-mob-x{position:absolute;top:24px;right:32px;background:none;border:none;font-size:1.8rem;color:var(--tx);cursor:pointer}
-.cf-mob-ctrls{display:flex;flex-direction:column;gap:16px;margin-top:20px;align-items:center}
-
-/* =============================================
-   BUTTONS
-   ============================================= */
-.cf-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);white-space:nowrap}
-.cf-btn-pri{background:var(--pri);color:var(--bg)}
-.cf-btn-pri:hover{transform:translateY(-2px);box-shadow:var(--sh-hover);opacity:0.9}
-.cf-btn-ghost{background:transparent;color:var(--tx);border:1px solid var(--bdr)}
-.cf-btn-ghost:hover{background:var(--pri-g);border-color:var(--tx)}
-.cf-btn-sm{padding:10px 20px;font-size:.8rem}
-.cf-btn-lg{padding:18px 36px;font-size:.95rem}
-
-/* =============================================
-   VIEWS CONTAINER & PROGRESS
-   ============================================= */
-.cf-view{display:none;opacity:0;transition:opacity 0.5s ease}
-.cf-view.active{display:block;opacity:1}
-.cf-progress{position:fixed;top:70px;left:0;width:0;height:4px;background:var(--acc);z-index:99989;transition:width .1s linear}
-
-/* =============================================
-   SECTIONS & TYPOGRAPHY
-   ============================================= */
-.cf-s{padding:120px 0;position:relative}
-.cf-s-alt{background:var(--bg2)}
-.cf-s-head{text-align:center;max-width:600px;margin:0 auto 60px}
-.cf-s-tag{display:inline-block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--acc);margin-bottom:12px}
-.cf-s-head h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:16px;color:var(--tx)}
-.cf-s-head p{color:var(--tx2);font-size:1.05rem;line-height:1.6}
-
-/* =============================================
-   LANDING: HERO
-   ============================================= */
-.cf-hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 0 80px;text-align:center;overflow:hidden}
-.cf-hero-c{position:relative;z-index:2;max-width:800px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
-.cf-hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:50px;background:var(--sf);backdrop-filter:blur(10px);color:var(--tx);font-size:.8rem;font-weight:600;margin-bottom:32px;border:1px solid var(--bdr);box-shadow:var(--sh)}
-.cf-hero h1{font-size:clamp(2.8rem,7vw,5rem);color:var(--tx);margin-bottom:24px;line-height:1.1}
-.cf-hero h1 span.cf-grad{background:linear-gradient(135deg, var(--acc), #ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.cf-hero-p{font-size:clamp(1rem,2vw,1.2rem);color:var(--tx2);max-width:600px;margin:0 auto 40px;line-height:1.6}
-
-.cf-hero-form{display:flex;gap:12px;width:100%;max-width:500px;margin:0 auto 24px}
-.cf-hero-form input{flex:1;padding:16px 24px;border-radius:50px;border:1px solid var(--bdr);background:var(--bg);color:var(--tx);font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;outline:none;transition:var(--ease);box-shadow:var(--sh)}
-.cf-hero-form input:focus{border-color:var(--acc);box-shadow:0 0 0 4px var(--acc-g)}
-.cf-hero-form.sent input,.cf-hero-form.sent button{pointer-events:none;opacity:.5}
-
-.cf-hero-stats{display:flex;gap:48px;justify-content:center;margin-top:60px;flex-wrap:wrap;border-top:1px solid var(--bdr);padding-top:40px}
-.cf-hero-stat{text-align:left}
-.cf-hero-stat strong{display:block;font-size:2rem;font-weight:800;color:var(--tx);line-height:1.2}
-.cf-hero-stat span{font-size:.85rem;color:var(--tx3);font-weight:500}
-
-/* =============================================
-   LANDING: FEATURED ARTICLES CARDS
-   ============================================= */
-.cf-articles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-.cf-article-card{background:var(--sf);backdrop-filter:blur(20px);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;transition:var(--ease);cursor:pointer;display:flex;flex-direction:column}
-.cf-article-card:hover{transform:translateY(-8px);box-shadow:var(--sh-hover)}
-.cf-article-img{height:200px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg3);color:var(--bdr);transition:var(--ease)}
-.cf-article-card:hover .cf-article-img{color:var(--tx);background:var(--pri-g)}
-.cf-article-body{padding:24px;flex:1;display:flex;flex-direction:column}
-.cf-article-cat{font-size:.7rem;font-weight:700;text-transform:uppercase;color:var(--acc);letter-spacing:.1em;margin-bottom:12px}
-.cf-article-body h3{font-size:1.2rem;margin-bottom:12px;line-height:1.4}
-.cf-article-body p{font-size:.9rem;color:var(--tx2);margin-bottom:24px;flex:1}
-.cf-article-meta{display:flex;align-items:center;justify-content:space-between;font-size:.8rem;color:var(--tx4);font-weight:500;border-top:1px solid var(--bdr);padding-top:16px}
-
-/* =============================================
-   LANDING: PRICING (Glass Cards)
-   ============================================= */
-.cf-pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:1000px;margin:0 auto}
-.cf-plan{background:var(--sf);backdrop-filter:blur(20px);border:1px solid var(--bdr);border-radius:var(--r);padding:40px 32px;text-align:left;transition:var(--ease);position:relative;display:flex;flex-direction:column}
-.cf-plan:hover{transform:translateY(-6px);box-shadow:var(--sh-hover)}
-.cf-plan.pop{border-color:var(--acc);box-shadow:0 8px 30px var(--acc-g)}
-.cf-pop-badge{position:absolute;top:-14px;left:32px;padding:6px 16px;border-radius:50px;background:var(--acc);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.05em}
-.cf-plan-name{font-size:.85rem;font-weight:700;color:var(--tx2);margin-bottom:12px}
-.cf-plan-price{font-size:3rem;font-weight:800;color:var(--tx);margin-bottom:4px;line-height:1}
-.cf-plan-price sup{font-size:1.2rem;vertical-align:top;position:relative;top:8px}
-.cf-plan-period{font-size:.85rem;color:var(--tx4);margin-bottom:32px}
-.cf-plan-feats{display:flex;flex-direction:column;gap:14px;margin-bottom:40px;flex:1}
-.cf-plan-feats li{font-size:.9rem;color:var(--tx2);display:flex;align-items:center;gap:12px}
-.cf-plan-feats li i{font-size:.8rem;color:var(--tx)}
-.cf-plan-feats li.dis{color:var(--tx4);opacity:0.6}
-.cf-plan-feats li.dis i{color:var(--tx4)}
-
-/* =============================================
-   LANDING: TESTIMONIALS
-   ============================================= */
-.cf-test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-.cf-test{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r);padding:32px;transition:var(--ease);box-shadow:var(--sh)}
-.cf-test:hover{box-shadow:var(--sh-hover)}
-.cf-test p{font-size:1.05rem;color:var(--tx);line-height:1.6;margin-bottom:24px;font-weight:500}
-.cf-test-a{display:flex;align-items:center;gap:16px;border-top:1px solid var(--bdr);padding-top:20px}
-.cf-test-av{width:44px;height:44px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--tx);font-size:.9rem;font-weight:700}
-.cf-test-info strong{font-size:.9rem;display:block;color:var(--tx)}
-.cf-test-info span{font-size:.8rem;color:var(--tx3)}
-
-/* =============================================
-   LANDING: FAQ
-   ============================================= */
-.cf-faq-list{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-.cf-faq{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);overflow:hidden;transition:var(--ease)}
-.cf-faq:hover{border-color:var(--tx3)}
-.cf-faq-q{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;cursor:pointer;font-size:1rem;font-weight:600;color:var(--tx)}
-.cf-faq-q i{transition:transform var(--ease);color:var(--tx4);font-size:.9rem}
-.cf-faq.open .cf-faq-q i{transform:rotate(180deg);color:var(--tx)}
-.cf-faq-a{max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.16,1,0.3,1)}
-.cf-faq.open .cf-faq-a{max-height:400px}
-.cf-faq-a p{padding:0 28px 28px;font-size:.95rem;color:var(--tx2);line-height:1.7}
-
-/* =============================================
-   BLOG VIEW
-   ============================================= */
-.cf-blog-hero{padding:160px 0 80px;text-align:center;position:relative}
-.cf-blog-hero .cf-article-cat{display:inline-block;margin-bottom:20px}
-.cf-blog-hero h1{font-size:clamp(2.2rem,5vw,3.5rem);max-width:800px;margin:0 auto 24px}
-.cf-blog-meta{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--tx3);font-size:.9rem;font-weight:500}
-.cf-blog-meta-av{width:40px;height:40px;border-radius:50%;background:var(--bg3);display:inline-flex;align-items:center;justify-content:center;color:var(--tx);font-size:.8rem;font-weight:700}
-
-.cf-blog-content{padding:0 0 80px}
-.cf-blog-content article{font-size:1.15rem;color:var(--tx2);line-height:1.9}
-.cf-blog-content article h2{font-size:1.8rem;color:var(--tx);margin:48px 0 20px}
-.cf-blog-content article p{margin-bottom:24px}
-.cf-blog-content article blockquote{border-left:4px solid var(--tx);padding:8px 0 8px 32px;margin:40px 0;font-size:1.4rem;font-weight:500;color:var(--tx);line-height:1.5}
-
-.cf-share{display:flex;align-items:center;gap:16px;padding:32px 0;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);margin:60px 0}
-.cf-share span{font-size:.9rem;font-weight:600}
-.cf-share a{width:42px;height:42px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--tx);font-size:1rem;transition:var(--ease)}
-.cf-share a:hover{background:var(--tx);color:var(--bg);transform:translateY(-2px)}
-
-.cf-author{display:flex;gap:24px;padding:40px;background:var(--bg2);border-radius:var(--r);margin:60px 0}
-.cf-author-av{width:72px;height:72px;border-radius:50%;background:var(--tx);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;flex-shrink:0}
-.cf-author-info h4{font-size:1.2rem;margin-bottom:8px}
-.cf-author-info p{font-size:.95rem;color:var(--tx2)}
-
-/* =============================================
-   DASHBOARD VIEW (Ultra Minimalist)
-   ============================================= */
-.cf-dash{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 70px);margin-top:70px;background:var(--bg)}
-
-.cf-dash-side{background:var(--bg);border-right:1px solid var(--bdr);padding:32px 24px;display:flex;flex-direction:column;gap:8px;position:relative;z-index:10}
-.cf-side-link{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:12px;font-size:.9rem;font-weight:600;color:var(--tx3);cursor:pointer;transition:var(--ease)}
-.cf-side-link:hover,.cf-side-link.active{background:var(--pri-g);color:var(--tx)}
-.cf-side-link i{width:20px;text-align:center;font-size:1rem}
-.cf-side-spacer{flex:1}
-.cf-side-user{display:flex;align-items:center;gap:12px;padding:16px;border-top:1px solid var(--bdr);font-size:.9rem;font-weight:600}
-.cf-dash-side-av{width:36px;height:36px;border-radius:10px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.8rem}
-
-.cf-dash-main{padding:40px;overflow-y:auto;background:var(--bg2)}
-.cf-dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px}
-.cf-dash-header h2{font-size:1.8rem}
-
-.cf-dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:40px}
-.cf-d-stat{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;box-shadow:var(--sh);transition:var(--ease)}
-.cf-d-stat:hover{transform:translateY(-4px);box-shadow:var(--sh-hover)}
-.cf-d-stat small{font-size:.8rem;color:var(--tx3);font-weight:600}
-.cf-d-stat strong{display:block;font-size:2rem;font-weight:800;margin:8px 0 4px;color:var(--tx)}
-.cf-d-stat .up{font-size:.85rem;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px}
-
-.cf-dash-table{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
-.cf-dash-table-head{display:grid;grid-template-columns:2.5fr 1fr 1fr 100px;padding:16px 24px;background:var(--bg3);font-size:.8rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em}
-.cf-dash-row{display:grid;grid-template-columns:2.5fr 1fr 1fr 100px;padding:20px 24px;border-top:1px solid var(--bdr);align-items:center;font-size:.9rem;transition:var(--ease)}
-.cf-dash-row:hover{background:var(--pri-g)}
-.cf-dash-row-title{font-weight:600;color:var(--tx)}
-.cf-dash-status{padding:6px 14px;border-radius:50px;font-size:.75rem;font-weight:700;display:inline-block;background:var(--pri-g);color:var(--tx)}
-
-/* Newsletter CTA */
-.cf-nl{background:var(--bg3);padding:100px 0;text-align:center;position:relative}
-.cf-nl h2{font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:16px}
-.cf-nl p{color:var(--tx2);font-size:1.05rem;max-width:500px;margin:0 auto 32px}
-
-/* Share bar */
-.cf-share{display:flex;align-items:center;gap:16px;padding:32px 0;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);margin:60px 0}
-.cf-share span{font-size:.9rem;font-weight:600}
-.cf-share a{width:42px;height:42px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--tx);font-size:1rem;transition:var(--ease);cursor:pointer}
-.cf-share a:hover{background:var(--tx);color:var(--bg);transform:translateY(-2px)}
-
-/* Related */
-.cf-related{padding:40px 0}
-.cf-related h3{font-size:1.2rem;margin-bottom:20px}
-.cf-related-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.cf-related-card{display:flex;gap:16px;padding:20px;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--rs);cursor:pointer;transition:var(--ease)}
-.cf-related-card:hover{border-color:var(--tx3);box-shadow:var(--sh-hover)}
-.cf-related-thumb{width:64px;height:64px;border-radius:10px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--tx3);flex-shrink:0}
-.cf-related-info h4{font-size:.9rem;margin-bottom:4px}
-.cf-related-info span{font-size:.8rem;color:var(--tx4)}
-
-/* Dashboard subscribers */
-.cf-dash-subs{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;margin-top:24px;box-shadow:var(--sh)}
-.cf-dash-subs h3{font-size:1rem;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.cf-dash-subs h3 i{color:var(--acc)}
-.cf-sub-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr);font-size:.9rem}
-.cf-sub-row:last-child{border:none}
-.cf-sub-row .email{color:var(--tx2)}
-.cf-sub-row .date{color:var(--tx4);font-size:.8rem}
-
-/* Back to top */
-.cf-btt{position:fixed;bottom:24px;right:24px;z-index:99980;width:44px;height:44px;border-radius:50%;background:var(--pri);color:var(--bg);border:none;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(14px);transition:var(--ease)}
-.cf-btt.show{opacity:1;transform:translateY(0)}
-.cf-btt:hover{opacity:.8}
-
-/* =============================================
-   ANIMATIONS (Scroll Reveal)
-   ============================================= */
-.cf-reveal{opacity:0;transform:translateY(40px) scale(0.98);filter:blur(4px);transition:all 0.8s cubic-bezier(0.16, 1, 0.3, 1)}
-.cf-reveal.vis{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
-.cf-d1{transition-delay:0.1s}.cf-d2{transition-delay:0.2s}.cf-d3{transition-delay:0.3s}
-
-/* FOOTER */
-.cf-footer{background:var(--bg);border-top:1px solid var(--bdr);padding:40px 0}
-.cf-footer-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
-.cf-footer-copy{font-size:.85rem;color:var(--tx3);font-weight:500}
-.cf-footer-r{display:flex;gap:24px}
-.cf-footer-r a{font-size:.85rem;font-weight:500;color:var(--tx3);transition:var(--ease)}
-.cf-footer-r a:hover{color:var(--tx)}
-
-@media(max-width:992px){
-  .cf-articles-grid,.cf-test-grid,.cf-pricing{grid-template-columns:1fr;max-width:500px;margin:0 auto}
-  .cf-dash{grid-template-columns:1fr}
-  .cf-dash-side{flex-direction:row;flex-wrap:wrap;border-right:none;border-bottom:1px solid var(--bdr);padding:16px}
-  .cf-side-spacer,.cf-side-user{display:none}
-  .cf-dash-stats{grid-template-columns:repeat(2,1fr)}
-  .cf-related-grid{grid-template-columns:1fr}
-}
-@media(max-width:768px){
-  .cf-views.desk,.cf-tog.desk,.cf-sep.desk{display:none}
-  .cf-burg{display:block}
-  .cf-s{padding:80px 0}
-  .cf-hero{min-height:auto;padding:100px 0 60px}
-  .cf-hero h1{font-size:2.4rem}
-  .cf-hero-form{flex-direction:column}
-  .cf-hero-stats{gap:24px}
-  .cf-hero-stat strong{font-size:1.6rem}
-  .cf-footer-in{flex-direction:column;text-align:center}
-  .cf-dash-table-head,.cf-dash-row{grid-template-columns:2fr 1fr}
-  .cf-dash-table-head>:nth-child(3),.cf-dash-row>:nth-child(3),.cf-dash-table-head>:nth-child(4),.cf-dash-row>:nth-child(4){display:none}
-  .cf-blog-hero{padding:120px 0 60px}
-  .cf-blog-hero h1{font-size:1.8rem}
-  .cf-share{flex-wrap:wrap;justify-content:center}
-  .cf-author{flex-direction:column;align-items:center;text-align:center}
-  .cf-nl{padding:60px 0}
-}
-</style>
-
-<div class="cf" id="cfApp">
-  <!-- Progress -->
-  <div class="cf-progress" id="cfProgress"></div>
-
-  <!-- BG FX -->
-  <div class="cf-blur-bg"></div>
-
-  <!-- NAV -->
-  <nav class="cf-nav" id="cfNav">
-    <div class="cf-nav-in">
-      <div class="cf-logo" onclick="cfSwitchView('landing')">
-        <span class="cf-logo-i"><i class="fas fa-feather-pointed"></i></span>
-        ContentForge
-      </div>
-      <div class="cf-views desk" id="cfViewBtns">
-        <button class="cf-view-btn active" onclick="cfSwitchView('landing')" data-i18n="v_home">Home</button>
-        <button class="cf-view-btn" onclick="cfSwitchView('blog')" data-i18n="v_blog">Blog Example</button>
-        <button class="cf-view-btn" onclick="cfSwitchView('dash')" data-i18n="v_dash">Dashboard</button>
-      </div>
-      <div class="cf-nav-r">
-        <div class="cf-tog desk"><span>ES</span><label class="cf-sw"><input type="checkbox" id="cfLang" checked><span class="cf-sli"></span></label><span>EN</span></div>
-        <div class="cf-sep desk"></div>
-        <div class="cf-tog desk"><i class="fas fa-sun"></i><label class="cf-sw"><input type="checkbox" id="cfTheme"><span class="cf-sli"></span></label><i class="fas fa-moon"></i></div>
-        <button class="cf-burg" id="cfBurg"><i class="fas fa-bars"></i></button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Mobile Menu -->
-  <div class="cf-mob" id="cfMob">
-    <button class="cf-mob-x" id="cfMobX"><i class="fas fa-xmark"></i></button>
-    <a onclick="cfSwitchView('landing');document.getElementById('cfMob').classList.remove('open')" data-i18n="v_home">Home</a>
-    <a onclick="cfSwitchView('blog');document.getElementById('cfMob').classList.remove('open')" data-i18n="v_blog">Blog</a>
-    <a onclick="cfSwitchView('dash');document.getElementById('cfMob').classList.remove('open')" data-i18n="v_dash">Dashboard</a>
-    <div class="cf-mob-ctrls">
-      <div class="cf-tog"><span>ES</span><label class="cf-sw"><input type="checkbox" class="cfLangS" checked><span class="cf-sli"></span></label><span>EN</span></div>
-      <div class="cf-tog"><i class="fas fa-sun"></i><label class="cf-sw"><input type="checkbox" class="cfThemeS"><span class="cf-sli"></span></label><i class="fas fa-moon"></i></div>
-    </div>
-  </div>
-
-  <!-- =============================================
-       VIEW 1: LANDING
-       ============================================= -->
-  <div class="cf-view active" id="cfLanding">
-    
-    <section class="cf-hero">
-      <div class="cf-w">
-        <div class="cf-hero-c cf-reveal vis">
-          <div class="cf-hero-badge" data-i18n="hero_badge">Advanced Creator Platform v2.0</div>
-          <h1><span data-i18n="hero_t1">Your Blog & Newsletter</span><br><span class="cf-grad" data-i18n="hero_t2">Perfectly Integrated</span></h1>
-          <p class="cf-hero-p" data-i18n="hero_sub">Publish articles, build your audience, and monetize content with zero friction. Ultra minimal, highly converting.</p>
-          <form class="cf-hero-form" id="cfHeroForm" action="https://formsubmit.co/labrujuladigitalblog@gmail.com" method="POST">
-            <input type="hidden" name="_subject" value="New ContentForge Lead!">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_next" value="#">
-            <input type="email" name="email" id="cfHeroEmail" data-i18n-ph="hero_ph" placeholder="Enter your email to start" required>
-            <button type="submit" class="cf-btn cf-btn-pri" id="cfHeroBtn" data-i18n="hero_cta">Get Started Free</button>
-          </form>
-          <div class="cf-hero-stats">
-            <div class="cf-hero-stat"><strong>25K+</strong><span data-i18n="st_1">Global Creators</span></div>
-            <div class="cf-hero-stat"><strong>99.9%</strong><span data-i18n="st_2">Uptime API</span></div>
-            <div class="cf-hero-stat"><strong>$8M+</strong><span data-i18n="st_3">Creator Revenue</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="cf-s cf-s-alt">
-      <div class="cf-w">
-        <div class="cf-s-head cf-reveal">
-          <span class="cf-s-tag" data-i18n="art_tag">Discovery</span>
-          <h2 data-i18n="art_title">Read by thousands.</h2>
-          <p data-i18n="art_sub">Deliver extreme readability with our minimalist layouts.</p>
-        </div>
-        <div class="cf-articles-grid">
-          <div class="cf-article-card cf-reveal cf-d1" onclick="cfSwitchView('blog')">
-            <div class="cf-article-img"><i class="fas fa-layer-group"></i></div>
-            <div class="cf-article-body">
-              <span class="cf-article-cat" data-i18n="a1_cat">Design Systems</span>
-              <h3 data-i18n="a1_t">The Future of Minimalist UI in 2025</h3>
-              <p data-i18n="a1_d">How removing friction leads to higher conversion rates for digital creators.</p>
-              <div class="cf-article-meta"><span>5 min read</span><span>12K views</span></div>
-            </div>
-          </div>
-          <div class="cf-article-card cf-reveal cf-d2" onclick="cfSwitchView('blog')">
-            <div class="cf-article-img"><i class="fas fa-bolt"></i></div>
-            <div class="cf-article-body">
-              <span class="cf-article-cat" data-i18n="a2_cat">Performance</span>
-              <h3 data-i18n="a2_t">Zero Dependencies, Maximum Speed</h3>
-              <p data-i18n="a2_d">Why shipping pure HTML/JS creates the best possible user experience.</p>
-              <div class="cf-article-meta"><span>8 min read</span><span>8.5K views</span></div>
-            </div>
-          </div>
-          <div class="cf-article-card cf-reveal cf-d3" onclick="cfSwitchView('blog')">
-            <div class="cf-article-img"><i class="fas fa-chart-line"></i></div>
-            <div class="cf-article-body">
-              <span class="cf-article-cat" data-i18n="a3_cat">Growth</span>
-              <h3 data-i18n="a3_t">Monetizing Attention Properly</h3>
-              <p data-i18n="a3_d">Strategies to turn your standard newsletter into a scalable paid platform.</p>
-              <div class="cf-article-meta"><span>12 min read</span><span>22K views</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="cf-s">
-      <div class="cf-w">
-        <div class="cf-s-head cf-reveal">
-          <span class="cf-s-tag" data-i18n="price_tag">Pricing</span>
-          <h2 data-i18n="price_title">Simple & Transparent.</h2>
-        </div>
-        <div class="cf-pricing">
-          <div class="cf-plan cf-reveal cf-d1">
-            <div class="cf-plan-name" data-i18n="pl_free">STARTER</div>
-            <div class="cf-plan-price"><sup>$</sup>0</div>
-            <div class="cf-plan-period" data-i18n="pl_period_free">forever free</div>
-            <ul class="cf-plan-feats">
-              <li><i class="fas fa-check"></i> <span data-i18n="pf1">Unlimited articles</span></li>
-              <li><i class="fas fa-check"></i> <span data-i18n="pf2">Up to 500 subscribers</span></li>
-              <li class="dis"><i class="fas fa-minus"></i> <span data-i18n="pf3">No custom domain</span></li>
-              <li class="dis"><i class="fas fa-minus"></i> <span data-i18n="pf4">Standard analytics</span></li>
-            </ul>
-            <button class="cf-btn cf-btn-ghost" style="width:100%" data-i18n="pl_btn_free">Start Free</button>
-          </div>
-          <div class="cf-plan pop cf-reveal cf-d2">
-            <div class="cf-pop-badge">PRO CREATOR</div>
-            <div class="cf-plan-name">GROWTH</div>
-            <div class="cf-plan-price"><sup>$</sup>15</div>
-            <div class="cf-plan-period" data-i18n="pl_period">per month</div>
-            <ul class="cf-plan-feats">
-              <li><i class="fas fa-check"></i> <span data-i18n="pp1">Unlimited articles</span></li>
-              <li><i class="fas fa-check"></i> <span data-i18n="pp2">10,000 subscribers</span></li>
-              <li><i class="fas fa-check"></i> <span data-i18n="pp3">Custom Domain</span></li>
-              <li><i class="fas fa-check"></i> <span data-i18n="pp4">Advanced Analytics & Monetization</span></li>
-            </ul>
-            <button class="cf-btn cf-btn-pri" style="width:100%" data-i18n="pl_btn_pro">Upgrade to Pro</button>
-          </div>
-          <div class="cf-plan cf-reveal cf-d3">
-            <div class="cf-plan-name" data-i18n="pl_biz">BUSINESS</div>
-            <div class="cf-plan-price"><sup>$</sup>49</div>
-            <div class="cf-plan-period" data-i18n="pl_period">per month</div>
-            <ul class="cf-plan-feats">
-              <li><i class="fas fa-check"></i> <span data-i18n="pb1">Everything unlimited</span></li>
-              <li><i class="fas fa-check"></i> <span data-i18n="pb2">Unlimited subscribers</span></li>
-              <li><i class="fas fa-check"></i> <span data-i18n="pb3">Multi-author & Team</span></li>
-              <li><i class="fas fa-check"></i> <span data-i18n="pb4">Full API & Priority Support</span></li>
-            </ul>
-            <button class="cf-btn cf-btn-ghost" style="width:100%" data-i18n="pl_btn_biz">Contact Sales</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="cf-s cf-s-alt">
-      <div class="cf-w">
-        <div class="cf-s-head cf-reveal">
-          <span class="cf-s-tag" data-i18n="test_tag">Testimonials</span>
-          <h2 data-i18n="test_title">Loved by creators.</h2>
-        </div>
-        <div class="cf-test-grid">
-          <div class="cf-test cf-reveal cf-d1">
-            <p data-i18n="t1">"I migrated from Substack and my revenue grew 40%. Best decision ever."</p>
-            <div class="cf-test-a"><div class="cf-test-av">EM</div><div class="cf-test-info"><strong>Elena Martinez</strong><span data-i18n="t1r">Finance Newsletter</span></div></div>
-          </div>
-          <div class="cf-test cf-reveal cf-d2">
-            <p data-i18n="t2">"The dashboard is incredible. I optimize my strategy in real time."</p>
-            <div class="cf-test-a"><div class="cf-test-av">JW</div><div class="cf-test-info"><strong>James Wilson</strong><span data-i18n="t2r">Tech Blogger</span></div></div>
-          </div>
-          <div class="cf-test cf-reveal cf-d3">
-            <p data-i18n="t3">"From 0 to 8K subscribers in 4 months. The newsletter tool is perfect."</p>
-            <div class="cf-test-a"><div class="cf-test-av">LK</div><div class="cf-test-info"><strong>Laura Kim</strong><span data-i18n="t3r">Lifestyle Creator</span></div></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="cf-s">
-      <div class="cf-w">
-        <div class="cf-s-head cf-reveal">
-          <span class="cf-s-tag" data-i18n="faq_tag">FAQ</span>
-          <h2 data-i18n="faq_title">Common questions.</h2>
-        </div>
-        <div class="cf-faq-list">
-          <div class="cf-faq cf-reveal cf-d1"><div class="cf-faq-q"><span data-i18n="fq1_q">Can I migrate my existing blog?</span><i class="fas fa-chevron-down"></i></div><div class="cf-faq-a"><p data-i18n="fq1_a">Yes. We support import from WordPress, Substack, Medium, and Ghost. Your content and subscribers migrate in minutes.</p></div></div>
-          <div class="cf-faq cf-reveal cf-d2"><div class="cf-faq-q"><span data-i18n="fq2_q">How does monetization work?</span><i class="fas fa-chevron-down"></i></div><div class="cf-faq-a"><p data-i18n="fq2_a">Charge monthly or annual subscriptions via Stripe. Receive payments directly with zero commission on Pro.</p></div></div>
-          <div class="cf-faq cf-reveal cf-d3"><div class="cf-faq-q"><span data-i18n="fq3_q">Can I use my own domain?</span><i class="fas fa-chevron-down"></i></div><div class="cf-faq-a"><p data-i18n="fq3_a">Yes, even on the free plan. Connect your domain in under 5 minutes.</p></div></div>
-          <div class="cf-faq cf-reveal cf-d1"><div class="cf-faq-q"><span data-i18n="fq4_q">Is there an article limit?</span><i class="fas fa-chevron-down"></i></div><div class="cf-faq-a"><p data-i18n="fq4_a">No. All plans include unlimited articles.</p></div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Newsletter CTA -->
-    <section class="cf-nl cf-reveal">
-      <div class="cf-w">
-        <h2 data-i18n="nl_t">Start Creating Today</h2>
-        <p data-i18n="nl_d">Join thousands of creators already monetizing their content.</p>
-        <button class="cf-btn cf-btn-pri cf-btn-lg" data-i18n="nl_cta">Create My Free Blog →</button>
-      </div>
-    </section>
-  </div>
-
-  <!-- =============================================
-       VIEW 2: BLOG ARTICLE
-       ============================================= -->
-  <div class="cf-view" id="cfBlog">
-    <div class="cf-blog-hero cf-reveal vis">
-      <div class="cf-wn">
-        <span class="cf-article-cat" data-i18n="blog_cat">Design Systems</span>
-        <h1 data-i18n="blog_title">The Future of Minimalist UI in 2025</h1>
-        <div class="cf-blog-meta">
-          <span class="cf-blog-meta-av">AL</span>
-          <span>Alex Lee</span>
-          <span>•</span>
-          <span>October 24, 2025</span>
-        </div>
-      </div>
-    </div>
-    <div class="cf-blog-content cf-reveal vis cf-d1">
-      <div class="cf-wn">
-        <article>
-          <p data-i18n="bp1">Digital design is experiencing a radical shift toward reduction. We are moving away from heavy interfaces cluttered with excessive borders, complex shadows, and overpowering colors.</p>
-          <h2 data-i18n="bh1">The Erasure of Borders</h2>
-          <p data-i18n="bp2">Modern interfaces rely on whitespace and subtle typography changes to establish hierarchy, rather than drawing hard boxes around everything.</p>
-          <blockquote data-i18n="bq1">"The best interface is the one that disappears entirely, leaving only the content and the user's intent."</blockquote>
-          <h2 data-i18n="bh2">Micro-Interactions over Macro-Animations</h2>
-          <p data-i18n="bp3">Large, sweeping animations are out. Fast, snappy, and barely perceptible micro-interactions are in.</p>
-        </article>
-
-        <div class="cf-share">
-          <span data-i18n="share">Share:</span>
-          <a><i class="fab fa-twitter"></i></a>
-          <a><i class="fab fa-linkedin-in"></i></a>
-          <a><i class="fab fa-facebook-f"></i></a>
-          <a><i class="fas fa-link"></i></a>
-        </div>
-
-        <div class="cf-author cf-reveal">
-          <div class="cf-author-av">AL</div>
-          <div class="cf-author-info">
-            <h4>Alex Lee</h4>
-            <p data-i18n="author_bio">Lead UX Engineer. Writing about performance, minimalism, and the intersection of code and aesthetics.</p>
-          </div>
-        </div>
-
-        <div class="cf-related cf-reveal">
-          <h3 data-i18n="rel_title">Related Articles</h3>
-          <div class="cf-related-grid">
-            <div class="cf-related-card" onclick="cfSwitchView('blog')">
-              <div class="cf-related-thumb"><i class="fas fa-bolt"></i></div>
-              <div class="cf-related-info"><h4 data-i18n="rel1">Zero Dependencies, Maximum Speed</h4><span>8 min · 8.5K views</span></div>
-            </div>
-            <div class="cf-related-card" onclick="cfSwitchView('blog')">
-              <div class="cf-related-thumb"><i class="fas fa-chart-line"></i></div>
-              <div class="cf-related-info"><h4 data-i18n="rel2">Monetizing Attention Properly</h4><span>12 min · 22K views</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="text-align:center;padding:40px 0">
-          <button class="cf-btn cf-btn-ghost" onclick="cfSwitchView('landing')" data-i18n="back">← Back to Overview</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- =============================================
-       VIEW 3: DASHBOARD
-       ============================================= -->
-  <div class="cf-view" id="cfDash">
-    <div class="cf-dash">
-      <div class="cf-dash-side cf-reveal vis">
-        <div class="cf-side-link active"><i class="fas fa-border-all"></i> <span data-i18n="d_overview">Overview</span></div>
-        <div class="cf-side-link"><i class="fas fa-feather"></i> <span data-i18n="d_articles">Articles</span></div>
-        <div class="cf-side-link"><i class="fas fa-users"></i> <span data-i18n="d_audience">Audience</span></div>
-        <div class="cf-side-link"><i class="fas fa-chart-line"></i> <span data-i18n="d_analytics">Analytics</span></div>
-        <div class="cf-side-spacer"></div>
-        <div class="cf-side-user"><div class="cf-dash-side-av">AL</div> Alex Lee</div>
-      </div>
-      <div class="cf-dash-main">
-        <div class="cf-dash-header cf-reveal vis">
-          <h2 data-i18n="d_title">Overview</h2>
-          <button class="cf-btn cf-btn-pri cf-btn-sm" data-i18n="d_new">+ New Post</button>
-        </div>
-        <div class="cf-dash-stats cf-reveal vis cf-d1">
-          <div class="cf-d-stat"><small data-i18n="ds1">TOTAL VIEWS</small><strong>124.5K</strong><span class="up"><i class="fas fa-arrow-trend-up"></i> 12%</span></div>
-          <div class="cf-d-stat"><small data-i18n="ds2">SUBSCRIBERS</small><strong>8,459</strong><span class="up"><i class="fas fa-arrow-trend-up"></i> 340 new</span></div>
-          <div class="cf-d-stat"><small data-i18n="ds3">AVG OPEN RATE</small><strong>62.4%</strong><span class="up"><i class="fas fa-arrow-trend-up"></i> 2.1%</span></div>
-          <div class="cf-d-stat"><small data-i18n="ds4">MRR</small><strong>$4,250</strong><span class="up"><i class="fas fa-arrow-trend-up"></i> 8%</span></div>
-        </div>
-        <div class="cf-dash-table cf-reveal vis cf-d2">
-          <div class="cf-dash-table-head">
-            <span data-i18n="dt_title">Title</span><span data-i18n="dt_status">Status</span><span data-i18n="dt_views">Views</span><span data-i18n="dt_date">Date</span>
-          </div>
-          <div class="cf-dash-row"><span class="cf-dash-row-title" data-i18n="dr1">The Future of Minimalist UI</span><span><span class="cf-dash-status" data-i18n="st_pub">Published</span></span><span>12.4K</span><span>Oct 24</span></div>
-          <div class="cf-dash-row"><span class="cf-dash-row-title" data-i18n="dr2">Zero Dependencies</span><span><span class="cf-dash-status" data-i18n="st_pub">Published</span></span><span>8.5K</span><span>Oct 18</span></div>
-          <div class="cf-dash-row"><span class="cf-dash-row-title" data-i18n="dr3">Advanced CSS Techniques</span><span><span class="cf-dash-status" data-i18n="st_draft">Draft</span></span><span>—</span><span>—</span></div>
-        </div>
-        <div class="cf-dash-subs cf-reveal vis cf-d3">
-          <h3><i class="fas fa-users"></i> <span data-i18n="dsub_title">Recent Subscribers</span></h3>
-          <div class="cf-sub-row"><span class="email">john.doe@gmail.com</span><span class="date" data-i18n="dsub_today">Today</span></div>
-          <div class="cf-sub-row"><span class="email">maria.garcia@outlook.com</span><span class="date" data-i18n="dsub_today">Today</span></div>
-          <div class="cf-sub-row"><span class="email">alex.turner@yahoo.com</span><span class="date" data-i18n="dsub_yest">Yesterday</span></div>
-          <div class="cf-sub-row"><span class="email">emma.johnson@icloud.com</span><span class="date">Oct 22</span></div>
-        </div>
-        <div style="text-align:center;padding:24px 0">
-          <button class="cf-btn cf-btn-ghost cf-btn-sm" onclick="cfSwitchView('landing')" data-i18n="d_back">← Back to Home</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer class="cf-footer" id="cfFooter">
-    <div class="cf-w">
-      <div class="cf-footer-in">
-        <span class="cf-footer-copy" data-i18n="ftr">© 2025 ContentForge.</span>
-        <div class="cf-footer-r">
-          <a href="#">Twitter</a>
-          <a href="#">GitHub</a>
-        </div>
-      </div>
-      <div style="text-align:center;padding-top:20px;border-top:1px solid var(--bdr);margin-top:20px;font-size:.82rem;color:var(--tx3);line-height:1.7">
-        <span data-i18n="ftr_dev">Developed by: <strong style="color:var(--tx)">Source Vault Dev</strong> — CEO & Founder Gustavo</span><br>
-        <a href="https://wa.me/541125775087" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;color:#25d366;font-weight:600;margin-top:6px;transition:opacity .3s" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"><i class="fab fa-whatsapp" style="font-size:1.1rem"></i> +54 11 2577-5087</a>
-      </div>
-    </div>
-  </footer>
-
-  <button class="cf-btt" id="cfBtt"><i class="fas fa-arrow-up"></i></button>
-</div>
-
-<script>
-(function(){
-const T={
-en:{
-v_home:"Home",v_blog:"Blog",v_dash:"Dashboard",
-hero_badge:"✨ Advanced Creator Platform v2.0",hero_t1:"Your Blog & Newsletter",hero_t2:"Perfectly Integrated",
-hero_sub:"Publish articles, build your audience, and monetize content with zero friction. Ultra minimal, highly converting.",
-hero_ph:"Enter your email to start",hero_cta:"Get Started Free",hero_sent:"✅ You're in! Check your email.",
-st_1:"Global Creators",st_2:"Uptime API",st_3:"Creator Revenue",
-art_tag:"Discovery",art_title:"Read by thousands.",art_sub:"Deliver extreme readability with our minimalist layouts.",
-a1_cat:"Design Systems",a1_t:"The Future of Minimalist UI in 2025",a1_d:"How removing friction leads to higher conversion rates for digital creators.",
-a2_cat:"Performance",a2_t:"Zero Dependencies, Maximum Speed",a2_d:"Why shipping pure HTML/JS creates the best possible user experience.",
-a3_cat:"Growth",a3_t:"Monetizing Attention Properly",a3_d:"Strategies to turn your standard newsletter into a scalable paid platform.",
-price_tag:"Pricing",price_title:"Simple & Transparent.",
-pl_free:"STARTER",pl_period_free:"forever free",pl_period:"per month",
-pf1:"Unlimited articles",pf2:"Up to 500 subscribers",pf3:"No custom domain",pf4:"Standard analytics",
-pp1:"Unlimited articles",pp2:"10,000 subscribers",pp3:"Custom Domain",pp4:"Advanced Analytics & Monetization",
-pl_btn_free:"Start Free",pl_btn_pro:"Upgrade to Pro",
-pl_biz:"BUSINESS",pb1:"Everything unlimited",pb2:"Unlimited subscribers",pb3:"Multi-author & Team",pb4:"Full API & Priority Support",pl_btn_biz:"Contact Sales",
-test_tag:"Testimonials",test_title:"Loved by creators.",
-t1:'"I migrated from Substack and my revenue grew 40%. Best decision ever."',t1r:"Finance Newsletter",
-t2:'"The dashboard is incredible. I optimize my strategy in real time."',t2r:"Tech Blogger",
-t3:'"From 0 to 8K subscribers in 4 months. The newsletter tool is perfect."',t3r:"Lifestyle Creator",
-faq_tag:"FAQ",faq_title:"Common questions.",
-fq1_q:"Can I migrate my existing blog?",fq1_a:"Yes. We support import from WordPress, Substack, Medium, and Ghost. Your content and subscribers migrate in minutes.",
-fq2_q:"How does monetization work?",fq2_a:"Charge monthly or annual subscriptions via Stripe. Receive payments directly with zero commission on Pro.",
-fq3_q:"Can I use my own domain?",fq3_a:"Yes, even on the free plan. Connect your domain in under 5 minutes.",
-fq4_q:"Is there an article limit?",fq4_a:"No. All plans include unlimited articles.",
-nl_t:"Start Creating Today",nl_d:"Join thousands of creators already monetizing their content.",nl_cta:"Create My Free Blog →",
-blog_cat:"Design Systems",blog_title:"The Future of Minimalist UI in 2025",blog_date:"October 24, 2025",
-bp1:"Digital design is experiencing a radical shift toward reduction. We are moving away from heavy interfaces cluttered with excessive borders, complex shadows, and overpowering colors.",
-bh1:"The Erasure of Borders",bp2:"Modern interfaces rely on whitespace and subtle typography changes to establish hierarchy, rather than drawing hard boxes around everything.",
-bq1:'"The best interface is the one that disappears entirely, leaving only the content and the user\'s intent."',
-bh2:"Micro-Interactions over Macro-Animations",bp3:"Large, sweeping animations are out. Fast, snappy, and barely perceptible micro-interactions are in.",
-share:"Share:",author_bio:"Lead UX Engineer. Writing about performance, minimalism, and the intersection of code and aesthetics.",
-rel_title:"Related Articles",rel1:"Zero Dependencies, Maximum Speed",rel2:"Monetizing Attention Properly",
-back:"← Back to Overview",
-d_overview:"Overview",d_articles:"Articles",d_audience:"Audience",d_analytics:"Analytics",
-d_title:"Overview",d_new:"+ New Post",
-ds1:"TOTAL VIEWS",ds2:"SUBSCRIBERS",ds3:"AVG OPEN RATE",ds4:"MRR",
-dt_title:"Title",dt_status:"Status",dt_views:"Views",dt_date:"Date",
-dr1:"The Future of Minimalist UI",dr2:"Zero Dependencies",dr3:"Advanced CSS Techniques",
-st_pub:"Published",st_draft:"Draft",
-dsub_title:"Recent Subscribers",dsub_today:"Today",dsub_yest:"Yesterday",
-d_back:"← Back to Home",
-ftr:"© 2025 ContentForge.",
-ftr_dev:'Developed by: <strong style="color:var(--tx)">Source Vault Dev</strong> — CEO & Founder Gustavo'
-},
-es:{
-v_home:"Inicio",v_blog:"Blog",v_dash:"Dashboard",
-hero_badge:"✨ Plataforma Avanzada para Creadores v2.0",hero_t1:"Tu Blog y Newsletter",hero_t2:"Perfectamente Integrados",
-hero_sub:"Publicá artículos, construí tu audiencia y monetizá tu contenido sin fricción. Ultra minimalista, altamente efectivo.",
-hero_ph:"Tu email para empezar",hero_cta:"Empezar Gratis",hero_sent:"✅ ¡Listo! Revisá tu email.",
-st_1:"Creadores Globales",st_2:"Uptime API",st_3:"Ingresos de Creadores",
-art_tag:"Descubrimiento",art_title:"Leído por miles.",art_sub:"Legibilidad extrema con nuestros diseños minimalistas.",
-a1_cat:"Sistemas de Diseño",a1_t:"El Futuro del UI Minimalista en 2025",a1_d:"Cómo eliminar la fricción lleva a mejores tasas de conversión.",
-a2_cat:"Rendimiento",a2_t:"Cero Dependencias, Máxima Velocidad",a2_d:"Por qué enviar HTML/JS puro crea la mejor experiencia de usuario.",
-a3_cat:"Crecimiento",a3_t:"Monetizando la Atención Correctamente",a3_d:"Estrategias para convertir tu newsletter en una plataforma de pago escalable.",
-price_tag:"Precios",price_title:"Simple y Transparente.",
-pl_free:"INICIAL",pl_period_free:"gratis para siempre",pl_period:"por mes",
-pf1:"Artículos ilimitados",pf2:"Hasta 500 suscriptores",pf3:"Sin dominio personalizado",pf4:"Analíticas básicas",
-pp1:"Artículos ilimitados",pp2:"10,000 suscriptores",pp3:"Dominio Personalizado",pp4:"Analíticas Avanzadas y Monetización",
-pl_btn_free:"Empezar Gratis",pl_btn_pro:"Obtener Pro",
-pl_biz:"EMPRESA",pb1:"Todo ilimitado",pb2:"Suscriptores ilimitados",pb3:"Multi-autor y Equipo",pb4:"API Completa y Soporte Prioritario",pl_btn_biz:"Contactar Ventas",
-test_tag:"Testimonios",test_title:"Amado por creadores.",
-t1:'"Migré de Substack y mis ingresos crecieron 40%. La mejor decisión."',t1r:"Newsletter de Finanzas",
-t2:'"El dashboard es increíble. Optimizo mi estrategia en tiempo real."',t2r:"Tech Blogger",
-t3:'"De 0 a 8K suscriptores en 4 meses. La herramienta de newsletter es perfecta."',t3r:"Lifestyle Creator",
-faq_tag:"FAQ",faq_title:"Preguntas frecuentes.",
-fq1_q:"¿Puedo migrar mi blog existente?",fq1_a:"Sí. Importamos desde WordPress, Substack, Medium y Ghost. Tu contenido y suscriptores se migran en minutos.",
-fq2_q:"¿Cómo funciona la monetización?",fq2_a:"Cobrá suscripciones mensuales o anuales vía Stripe. Recibís pagos directos sin comisión en Pro.",
-fq3_q:"¿Puedo usar mi propio dominio?",fq3_a:"Sí, desde el plan gratuito. Conectá tu dominio en menos de 5 minutos.",
-fq4_q:"¿Hay límite de artículos?",fq4_a:"No. Todos los planes incluyen artículos ilimitados.",
-nl_t:"Empezá a Crear Hoy",nl_d:"Unite a miles de creadores que ya monetizan su contenido.",nl_cta:"Crear mi Blog Gratis →",
-blog_cat:"Sistemas de Diseño",blog_title:"El Futuro del UI Minimalista en 2025",blog_date:"24 de Octubre, 2025",
-bp1:"El diseño digital está experimentando un cambio radical hacia la reducción. Nos alejamos de interfaces pesadas con bordes excesivos y colores abrumadores.",
-bh1:"La Eliminación de los Bordes",bp2:"Las interfaces modernas usan espacios en blanco y cambios sutiles de tipografía para establecer jerarquía.",
-bq1:'"La mejor interfaz es la que desaparece completamente, dejando solo el contenido y la intención del usuario."',
-bh2:"Micro-Interacciones sobre Macro-Animaciones",bp3:"Las animaciones grandes están fuera. Las micro-interacciones rápidas y sutiles están de moda.",
-share:"Compartir:",author_bio:"Ingeniero UX. Escribe sobre rendimiento, minimalismo y la intersección entre código y estética.",
-rel_title:"Artículos Relacionados",rel1:"Cero Dependencias, Máxima Velocidad",rel2:"Monetizando la Atención",
-back:"← Volver al Inicio",
-d_overview:"Resumen",d_articles:"Artículos",d_audience:"Audiencia",d_analytics:"Analíticas",
-d_title:"Resumen",d_new:"+ Nuevo Artículo",
-ds1:"VISITAS TOTALES",ds2:"SUSCRIPTORES",ds3:"TASA DE APERTURA",ds4:"MRR",
-dt_title:"Título",dt_status:"Estado",dt_views:"Visitas",dt_date:"Fecha",
-dr1:"El Futuro del UI Minimalista",dr2:"Cero Dependencias",dr3:"Técnicas Avanzadas de CSS",
-st_pub:"Publicado",st_draft:"Borrador",
-dsub_title:"Suscriptores Recientes",dsub_today:"Hoy",dsub_yest:"Ayer",
-d_back:"← Volver al Inicio",
-ftr:"© 2025 ContentForge.",
-ftr_dev:'Desarrollado por: <strong style="color:var(--tx)">Source Vault Dev</strong> — CEO & Founder Gustavo'
-}
-};
-
-const root=document.getElementById('cfApp');
-const nav=document.getElementById('cfNav');
-const themeT=document.getElementById('cfTheme');
-const langT=document.getElementById('cfLang');
-const progress=document.getElementById('cfProgress');
-const btt=document.getElementById('cfBtt');
-const tS=document.querySelectorAll('.cfThemeS');
-const lS=document.querySelectorAll('.cfLangS');
-let cL='en', cT=localStorage.getItem('cfTheme')||'dark', currentView='landing';
-
-// ---- THEME ----
-function setTheme(t){
-  cT=t;
-  t==='dark'?root.classList.add('dk'):root.classList.remove('dk');
-  themeT.checked=t==='dark';
-  tS.forEach(s=>s.checked=t==='dark');
-  localStorage.setItem('cfTheme',t);
-}
-themeT.addEventListener('change',()=>setTheme(themeT.checked?'dark':'light'));
-tS.forEach(s=>s.addEventListener('change',()=>setTheme(s.checked?'dark':'light')));
-
-// ---- LANGUAGE ----
-function setLang(l){
-  cL=l;const d=T[l];if(!d)return;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(d[k])el.innerHTML=d[k];});
-  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{const k=el.getAttribute('data-i18n-ph');if(d[k])el.placeholder=d[k];});
-  langT.checked=l==='en';
-  lS.forEach(s=>s.checked=l==='en');
-}
-langT.addEventListener('change',()=>setLang(langT.checked?'en':'es'));
-lS.forEach(s=>s.addEventListener('change',()=>setLang(s.checked?'en':'es')));
-
-// ---- VIEW SWITCHER ----
-window.cfSwitchView=function(view){
-  currentView=view;
-  document.querySelectorAll('.cf-view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.cf-view-btn').forEach(b=>b.classList.remove('active'));
-  const map={landing:'cfLanding',blog:'cfBlog',dash:'cfDash'};
-  const el=document.getElementById(map[view]);
-  el.classList.add('active');
-  document.querySelectorAll('.cf-view-btn').forEach(b=>{
-    const k=b.getAttribute('data-i18n');
-    if((view==='landing'&&k==='v_home')||(view==='blog'&&k==='v_blog')||(view==='dash'&&k==='v_dash'))b.classList.add('active');
-  });
-  document.getElementById('cfFooter').style.display=view==='dash'?'none':'block';
-  progress.style.display=view==='blog'?'block':'none';
-  if(view!=='blog')progress.style.width='0%';
-  window.scrollTo({top:0,behavior:'smooth'});
-  setTimeout(()=>{el.querySelectorAll('.cf-reveal').forEach(r=>obs.observe(r));},100);
-};
-
-// ---- MOBILE MENU ----
-document.getElementById('cfBurg').addEventListener('click',()=>document.getElementById('cfMob').classList.add('open'));
-document.getElementById('cfMobX').addEventListener('click',()=>document.getElementById('cfMob').classList.remove('open'));
-
-// ---- SCROLL ----
-window.addEventListener('scroll',()=>{
-  nav.classList.toggle('scrolled',window.scrollY>20);
-  if(btt)btt.classList.toggle('show',window.scrollY>400);
-  if(currentView==='blog'){
-    const h=document.documentElement.scrollHeight-window.innerHeight;
-    progress.style.width=Math.min((window.scrollY/h)*100,100)+'%';
+// --- DICTIONARY (i18n) & COPYWRITING ---
+// SEO Keywords: Shopify affiliate program, affiliate marketing, automation.
+// Neuromarketing: Action-oriented, emotional triggers (effortless, scale), social proof.
+const translations = {
+  en: {
+    nav: {
+      features: "Features",
+      pricing: "Pricing",
+      login: "Login",
+      dashboard: "Go to Dashboard",
+      home: "Back to Home"
+    },
+    demo: "This feature is limited in the Demo version.",
+    footerRights: "All rights reserved.",
+    hero: {
+      badge: "🚀 The #1 Shopify Affiliate Marketing App",
+      title: "Automate Your Shopify Affiliate Program. Scale Effortlessly.",
+      subtitle: "Turn your best customers into your top promoters without lifting a finger. Zero coding, zero friction. Set up your affiliate marketing automation in exactly 3 minutes.",
+      ctaPrimary: "Start 14-Day Free Trial",
+      ctaSecondary: "See How it Works",
+      socialProof: "Trusted by 5,000+ fast-growing Shopify merchants."
+    },
+    features: {
+      title: "Everything you need to grow on autopilot",
+      bento1Title: "One-Click Shopify Integration",
+      bento1Desc: "Connect your store instantly. We sync your products, orders, and customer data in real-time.",
+      bento2Title: "Smart Commission Rules",
+      bento2Desc: "Set flat rates, percentages, or product-specific tiers. Total flexibility to maximize ROI.",
+      bento3Title: "Branded Affiliate Portal",
+      bento3Desc: "Give your ambassadors a premium dashboard that matches your brand's look and feel.",
+      bento4Title: "Automated Payouts",
+      bento4Desc: "Say goodbye to spreadsheets. Send rewards via PayPal or store credit with a single click."
+    },
+    dashboard: {
+      welcome: "Welcome back, Store Owner",
+      overview: "Program Overview",
+      revenue: "Revenue Generated",
+      affiliates: "Active Affiliates",
+      clicks: "Total Link Clicks",
+      conversions: "Conversion Rate",
+      recentActivity: "Recent Conversions",
+      topAffiliates: "Top Performing Affiliates",
+      statusPending: "Pending",
+      statusPaid: "Paid"
+    },
+    footer: "Desarrollado por SOURCE VAULT - CEO & Founder: Gustavo +541125775087 contacto directo vía WhatsApp" // Mandatory EXACT text
+  },
+  es: {
+    nav: {
+      features: "Funciones",
+      pricing: "Precios",
+      login: "Iniciar Sesión",
+      dashboard: "Ir al Dashboard",
+      home: "Volver al Inicio"
+    },
+    demo: "Esta función está limitada en la versión Demo.",
+    footerRights: "Todos los derechos reservados.",
+    hero: {
+      badge: "🚀 La App #1 de Marketing de Afiliados para Shopify",
+      title: "Automatiza tu Programa de Afiliados en Shopify. Escala sin Esfuerzo.",
+      subtitle: "Convierte a tus mejores clientes en tus principales promotores sin mover un dedo. Cero código, cero fricción. Configura tu automatización en exactamente 3 minutos.",
+      ctaPrimary: "Comenzar Prueba Gratis (14 Días)",
+      ctaSecondary: "Ver Cómo Funciona",
+      socialProof: "Con la confianza de más de 5,000 tiendas Shopify en crecimiento."
+    },
+    features: {
+      title: "Todo lo que necesitas para crecer en piloto automático",
+      bento1Title: "Integración Shopify en 1 Clic",
+      bento1Desc: "Conecta tu tienda al instante. Sincronizamos tus productos, órdenes y clientes en tiempo real.",
+      bento2Title: "Reglas de Comisión Inteligentes",
+      bento2Desc: "Establece montos fijos, porcentajes o niveles por producto. Flexibilidad total para tu ROI.",
+      bento3Title: "Portal de Afiliados Personalizado",
+      bento3Desc: "Dale a tus embajadores un panel premium que refleje la identidad visual de tu marca.",
+      bento4Title: "Pagos Automatizados",
+      bento4Desc: "Dile adiós a los Excels. Envía recompensas vía PayPal o crédito en tienda con un solo clic."
+    },
+    dashboard: {
+      welcome: "Hola de nuevo, Propietario",
+      overview: "Resumen del Programa",
+      revenue: "Ingresos Generados",
+      affiliates: "Afiliados Activos",
+      clicks: "Clics en Enlaces",
+      conversions: "Tasa de Conversión",
+      recentActivity: "Conversiones Recientes",
+      topAffiliates: "Afiliados Destacados",
+      statusPending: "Pendiente",
+      statusPaid: "Pagado"
+    },
+    footer: "Desarrollado por SOURCE VAULT - CEO & Founder: Gustavo +541125775087 contacto directo vía WhatsApp" // Mandatory EXACT text
   }
-});
+};
 
-// ---- BACK TO TOP ----
-if(btt)btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+// --- CUSTOM CSS FOR ADVANCED ANIMATIONS & GLASSMORPHISM ---
+const customStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-// ---- FAQ ----
-document.querySelectorAll('.cf-faq-q').forEach(q=>{
-  q.addEventListener('click',()=>q.parentElement.classList.toggle('open'));
-});
+  body {
+    font-family: 'Inter', sans-serif !important;
+  }
 
-// ---- NEWSLETTER FORM (FormSubmit.co) ----
-const heroBtn=document.getElementById('cfHeroBtn');
-const heroForm=document.getElementById('cfHeroForm');
-if(heroForm){heroForm.addEventListener('submit',function(e){
-  e.preventDefault();
-  const email=document.getElementById('cfHeroEmail').value;
-  if(!email||!email.includes('@'))return;
-  heroBtn.disabled=true;heroBtn.innerHTML='⏳...';
-  fetch(this.action,{method:'POST',body:new FormData(this),headers:{'Accept':'application/json'}})
-  .then(r=>{heroForm.classList.add('sent');heroBtn.innerHTML=T[cL].hero_sent;})
-  .catch(()=>{heroForm.classList.add('sent');heroBtn.innerHTML=T[cL].hero_sent;});
-});}
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes pulseSlow {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.05); }
+  }
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  .animate-pulse-slow {
+    animation: pulseSlow 8s ease-in-out infinite;
+  }
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  
+  /* Advanced Glassmorphism Utilities */
+  .glass-card-light {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+  }
+  .glass-card-dark {
+    background: rgba(17, 24, 39, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Fluid Typography base */
+  html { font-size: clamp(14px, 1vw + 10px, 18px); }
+`;
 
-// ---- SIDEBAR LINKS ----
-document.querySelectorAll('.cf-side-link').forEach(l=>{
-  l.addEventListener('click',function(){
-    document.querySelectorAll('.cf-side-link').forEach(x=>x.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
+export default function App() {
+  const [isDark, setIsDark] = useState(true); // Start in dark mode for that "WOW" modern feel
+  const [lang, setLang] = useState('en');
+  const [view, setView] = useState('landing'); // 'landing' or 'dashboard'
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [toast, setToast] = useState(null);
 
-// ---- INTERSECTION OBSERVER ----
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});
-},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.cf-reveal').forEach(el=>obs.observe(el));
+  const t = translations[lang];
 
-// ---- INIT ----
-setTheme(cT);
-setLang('en');
-progress.style.display='none';
-})();
-</script>
+  // Apply dark mode class to wrapper
+  const themeClass = isDark ? 'dark bg-gray-950 text-gray-50' : 'bg-slate-50 text-gray-900';
+  const glassClass = isDark ? 'glass-card-dark' : 'glass-card-light';
+
+  const toggleTheme = () => setIsDark(!isDark);
+  const toggleLang = () => setLang(lang === 'en' ? 'es' : 'en');
+
+  const showDemoToast = () => {
+    setToast(t.demo);
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  // --- COMPONENT: NAVBAR ---
+  const Navbar = () => (
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${isDark ? 'bg-gray-950/80' : 'bg-slate-50/80'} backdrop-blur-md border-b ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('landing')}>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+              <Zap className="text-white w-6 h-6" />
+            </div>
+            <span className="font-bold text-xl tracking-tight">AffiliFlow<span className="text-indigo-500">.</span></span>
+          </div>
+
+          {/* Desktop Nav Controls */}
+          <div className="hidden md:flex items-center space-x-6">
+            <button onClick={toggleLang} className="flex items-center gap-2 text-sm font-medium hover:text-indigo-500 transition-colors">
+              <Globe className="w-4 h-4" /> {lang === 'en' ? 'ES' : 'EN'}
+            </button>
+            <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+              {isDark ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-600" />}
+            </button>
+            
+            {view === 'landing' ? (
+              <button 
+                onClick={() => setView('dashboard')}
+                className="px-6 py-2.5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium hover:scale-105 transition-transform shadow-lg"
+              >
+                {t.nav.login}
+              </button>
+            ) : (
+              <button 
+                onClick={() => setView('landing')}
+                className="px-6 py-2.5 rounded-full border border-gray-300 dark:border-gray-700 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                {t.nav.home}
+              </button>
+            )}
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className="md:hidden flex items-center">
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2">
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Mobile Menu Dropdown */}
+      {mobileMenuOpen && (
+        <div className={`md:hidden absolute top-20 left-0 w-full p-4 border-b ${glassClass} ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
+           <div className="flex flex-col space-y-4">
+              <button onClick={toggleLang} className="flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-800">
+                <Globe className="w-4 h-4" /> Switch to {lang === 'en' ? 'Español' : 'English'}
+              </button>
+              <button onClick={toggleTheme} className="flex items-center justify-center gap-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-800">
+                {isDark ? <><Sun className="w-4 h-4" /> Light Mode</> : <><Moon className="w-4 h-4" /> Dark Mode</>}
+              </button>
+              <button 
+                onClick={() => { setView(view === 'landing' ? 'dashboard' : 'landing'); setMobileMenuOpen(false); }}
+                className="w-full py-3 rounded-xl bg-indigo-600 text-white font-medium"
+              >
+                {view === 'landing' ? t.nav.dashboard : t.nav.home}
+              </button>
+           </div>
+        </div>
+      )}
+    </nav>
+  );
+
+  // --- COMPONENT: LANDING PAGE ---
+  const LandingPage = () => (
+    <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen flex flex-col justify-center relative">
+      
+      {/* Background Glow Effects */}
+      <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-500/20 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse-slow"></div>
+      <div className="absolute top-60 right-0 w-[400px] h-[400px] bg-purple-500/10 blur-[100px] rounded-full pointer-events-none -z-10 animate-pulse-slow delay-300"></div>
+
+      {/* Hero Section */}
+      <div className="text-center max-w-4xl mx-auto animate-fade-in-up">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium text-sm mb-8 border border-indigo-500/20">
+          {t.hero.badge}
+        </div>
+        
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1]">
+          {lang === 'en' ? (
+            <>Automate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Shopify Affiliate</span> Program.</>
+          ) : (
+            <>Automatiza tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Programa de Afiliados</span> en Shopify.</>
+          )}
+        </h1>
+        
+        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+          {t.hero.subtitle}
+        </p>
+        
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+          <button 
+            onClick={showDemoToast}
+            className="w-full sm:w-auto px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-lg transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/25 flex items-center justify-center gap-2 group"
+          >
+            {t.hero.ctaPrimary} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+          <button onClick={showDemoToast} className={`w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-lg flex items-center justify-center gap-2 transition-all ${glassClass} hover:bg-gray-100/50 dark:hover:bg-gray-800/50 hover:scale-105`}>
+            <Play className="w-5 h-5" /> {t.hero.ctaSecondary}
+          </button>
+        </div>
+
+        <div className="flex items-center justify-center gap-3 text-sm text-gray-500 dark:text-gray-400 font-medium">
+          <div className="flex -space-x-2">
+            {[1,2,3,4].map(i => (
+              <img key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-950" src={`https://i.pravatar.cc/100?img=${i+10}`} alt="User" />
+            ))}
+          </div>
+          <span>{t.hero.socialProof}</span>
+        </div>
+      </div>
+
+      {/* Bento Grid Features Section */}
+      <div className="mt-32 animate-fade-in-up delay-200">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{t.features.title}</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]">
+          {/* Feature 1 (Spans 2 cols on Desktop) */}
+          <div className={`md:col-span-2 p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-colors duration-500"></div>
+            <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 animate-float">
+              <Zap className="w-7 h-7 text-indigo-500" />
+            </div>
+            <div className="relative z-10">
+              <h3 className="text-2xl font-bold mb-3">{t.features.bento1Title}</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">{t.features.bento1Desc}</p>
+            </div>
+          </div>
+
+          {/* Feature 2 */}
+          <div className={`p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-colors duration-500"></div>
+            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 animate-float delay-100">
+              <DollarSign className="w-7 h-7 text-emerald-500" />
+            </div>
+            <div className="relative z-10">
+              <h3 className="text-xl font-bold mb-3">{t.features.bento2Title}</h3>
+              <p className="text-gray-600 dark:text-gray-400">{t.features.bento2Desc}</p>
+            </div>
+          </div>
+
+          {/* Feature 3 */}
+          <div className={`p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-colors duration-500"></div>
+            <div className="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 animate-float delay-200">
+              <LayoutDashboard className="w-7 h-7 text-purple-500" />
+            </div>
+            <div className="relative z-10">
+              <h3 className="text-xl font-bold mb-3">{t.features.bento3Title}</h3>
+              <p className="text-gray-600 dark:text-gray-400">{t.features.bento3Desc}</p>
+            </div>
+          </div>
+
+          {/* Feature 4 (Spans 2 cols on Desktop) */}
+          <div className={`md:col-span-2 p-8 rounded-3xl ${glassClass} flex flex-col justify-between group hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}>
+             <div className="absolute -right-10 -top-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-colors duration-500"></div>
+             <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 animate-float delay-300">
+              <ShieldCheck className="w-7 h-7 text-blue-500" />
+            </div>
+            <div className="relative z-10">
+              <h3 className="text-2xl font-bold mb-3">{t.features.bento4Title}</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">{t.features.bento4Desc}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // --- COMPONENT: DASHBOARD ---
+  const Dashboard = () => (
+    <div className="pt-24 pb-12 px-4
